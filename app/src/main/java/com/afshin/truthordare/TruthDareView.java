@@ -5,12 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.MainThread;
@@ -19,6 +22,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class TruthDareView extends View {
@@ -29,6 +33,8 @@ public class TruthDareView extends View {
     private Rect textRect;
     private double centerX;
     private double centerY;
+    private double centerXBitmap;
+    private double centerYBitmap;
     private double radiusBigCircle;
     private double radiusCentralCircle;
     private double mainScreenPadding;
@@ -37,7 +43,9 @@ public class TruthDareView extends View {
     private double swipeAngle;
     private boolean isInit;
     private double screenPadding;
-    private double bottleAngle = 0;
+    private double bottleAngle = 1;
+    private Bitmap bmp ;
+    private Matrix bottleMatrix;
 
 
     public TruthDareView ( Context context ) {
@@ -61,14 +69,24 @@ public class TruthDareView extends View {
 
 
     private void init ( ) {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 3;
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
+
+       bottleMatrix=new Matrix();
+        //Canvas
         centerX = getWidth() / 2;
         centerY = getHeight() / 2;
+        
+        //Bottle
+        centerXBitmap=(getWidth()-bmp.getWidth())/2;
+        centerYBitmap=(getHeight()-bmp.getHeight())/2;
+        
+        
         radiusBigCircle = Math.min(getWidth(), getHeight()) / 2;
         radiusCentralCircle = radiusBigCircle / 2;
-        Log.i("radius", "init: " + radiusBigCircle + "\n" +
-                "getwidth:" + getWidth() + "\n"
-                + getHeight());
-        /**not yet initialized**/
+    
         calculateSwipeAngle(challengers.size());
         calculateScreenPadding();
 
@@ -153,28 +171,52 @@ public class TruthDareView extends View {
     }
 
 
-
     private void drawBottle ( Canvas canvas ) {
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
+        bottleMatrix.postRotate(((int) bottleAngle), bmp.getWidth()/2,bmp.getHeight()/2);
+        bottleMatrix.postTranslate(((float) -(bmp.getWidth()/2 - centerX)), -((float)( bmp.getHeight()/2 -centerY)));
 
-        options.inSampleSize = 2;
-        Bitmap bmp =
-                BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
+        // Set the current position to the updated rotation
 
-        canvas.save();
+//        int x = (int) (centerX + Math.cos(Math.toRadians(bottleAngle)) * (radiusBigCircle * 0.85));
+//        int y = (int) (centerY + Math.sin(Math.toRadians(bottleAngle)) * (radiusBigCircle * 0.85));
+//        canvas.drawLine(((float) centerX), ((float) centerY-y), x, y,arcPaint);
 
-//        int x = (int) (centerX + Math.cos(Math.toRadians(bottleAngle)) * (radiusCentralCircle));
-//        int y = (int) (centerY + Math.sin(Math.toRadians(bottleAngle)) * (radiusCentralCircle));
-        Log.i("bottleAngle", "drawBottle: "+bottleAngle);
-        canvas.save();
-        canvas.rotate(((float) bottleAngle));
-        canvas.drawBitmap(bmp, ((int) centerX), ((int) centerY), namePaint);
-        canvas.restore();
-        bottleAngle += 1;
-        postInvalidateDelayed(1);
+        canvas.drawBitmap(bmp,bottleMatrix,arcPaint);
+        bottleAngle += 30;
+//        bottleAngle += 30;
+//        postInvalidateDelayed(10);
+
+
 
     }
+
+    private void updateBottle( final int randomRotate){
+
+        new Thread(new Runnable() {
+            public void run() {
+
+                while (bottleAngle<randomRotate){
+
+                    postInvalidateDelayed(1);
+
+                }
+
+            }
+        }).start();
+//        while (bottleAngle<i) {
+//            Log.i("repeatation", "updateBottle: "+i+" "+bottleAngle);
+//
+//
+//            bottleAngle += 30;
+//            postInvalidateDelayed(10);
+//        }
+        bottleAngle = 1;
+//        Log.i("repeatation", "updateBottle: "+i+" "+bottleAngle);
+
+
+    }
+
 
     private void drawCentralCircle ( Canvas canvas ) {
 
@@ -185,6 +227,21 @@ public class TruthDareView extends View {
     protected void onMeasure ( int widthMeasureSpec, int heightMeasureSpec ) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
+    }
+
+    @Override
+    public boolean onTouchEvent ( MotionEvent event ) {
+        Log.i("sdffe", "onTouchEvent: "+event.getAction());
+        switch (event.getAction()){
+            case    MotionEvent.ACTION_UP:
+
+                updateBottle(new Random().nextInt(1000));
+              return false;
+
+
+            default:
+                return true;
+        }
     }
 
     public List < Challenger > getChallengers ( ) {
