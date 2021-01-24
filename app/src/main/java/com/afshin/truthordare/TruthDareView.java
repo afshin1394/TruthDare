@@ -9,16 +9,14 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.shapes.Shape;
-import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,29 +36,33 @@ public class TruthDareView extends View {
     private double radiusBigCircle;
     private double radiusCentralCircle;
     private double mainScreenPadding;
-    private List < Challenger > challengers = new ArrayList <>();
+    private List<Challenger> challengers = new ArrayList<>();
     private double startAngle;
     private double swipeAngle;
-    private boolean isInit;
+    private int numberOfChallengers;
+    private boolean isInit = false;
     private double screenPadding;
     private double bottleAngle = 1;
-    private Bitmap bmp ;
+    private Bitmap bmp;
     private Matrix bottleMatrix;
+    private boolean isTouched;
+    private int randomRotationNumber;
+    private Challenger tempChallenger;
 
 
-    public TruthDareView ( Context context ) {
+    public TruthDareView(Context context) {
         super(context);
         populateFake();
 
     }
 
-    public TruthDareView ( Context context, @Nullable AttributeSet attrs ) {
+    public TruthDareView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         populateFake();
 
     }
 
-    public TruthDareView ( Context context, @Nullable AttributeSet attrs, int defStyleAttr ) {
+    public TruthDareView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         populateFake();
 
@@ -68,25 +70,25 @@ public class TruthDareView extends View {
     }
 
 
-    private void init ( ) {
+    private void init() {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 3;
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
 
-       bottleMatrix=new Matrix();
+        bottleMatrix = new Matrix();
         //Canvas
         centerX = getWidth() / 2;
         centerY = getHeight() / 2;
-        
+
         //Bottle
-        centerXBitmap=(getWidth()-bmp.getWidth())/2;
-        centerYBitmap=(getHeight()-bmp.getHeight())/2;
-        
-        
+        centerXBitmap = (getWidth() - bmp.getWidth()) / 2;
+        centerYBitmap = (getHeight() - bmp.getHeight()) / 2;
+
+
         radiusBigCircle = Math.min(getWidth(), getHeight()) / 2;
         radiusCentralCircle = radiusBigCircle / 2;
-    
+
         calculateSwipeAngle(challengers.size());
         calculateScreenPadding();
 
@@ -116,7 +118,7 @@ public class TruthDareView extends View {
 
 
     @Override
-    protected void onDraw ( Canvas canvas ) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if (!isInit)
@@ -129,9 +131,19 @@ public class TruthDareView extends View {
         drawBottle(canvas);
 
 
+
+
+
+
+
+
+
+
+
+
     }
 
-    private void drawArcs ( Canvas canvas ) {
+    private void drawArcs(Canvas canvas) {
         double startAngle = 0;
         for (int i = 0; i < challengers.size(); i++) {
             arcPaint.setColor(challengers.get(i).getColor());
@@ -146,7 +158,7 @@ public class TruthDareView extends View {
 
     }
 
-    private void drawNames ( Canvas canvas, List < Challenger > challengers ) {
+    private void drawNames(Canvas canvas, List<Challenger> challengers) {
         namePaint.setTextSize(20);
 
         for (Challenger challenger : challengers) {
@@ -171,10 +183,10 @@ public class TruthDareView extends View {
     }
 
 
-    private void drawBottle ( Canvas canvas ) {
-
-        bottleMatrix.postRotate(((int) bottleAngle), bmp.getWidth()/2,bmp.getHeight()/2);
-        bottleMatrix.postTranslate(((float) -(bmp.getWidth()/2 - centerX)), -((float)( bmp.getHeight()/2 -centerY)));
+    private void drawBottle(Canvas canvas) {
+        Log.i("ANDLE", "drawBottle: "+bottleAngle);
+        bottleMatrix.postRotate(((int) bottleAngle), bmp.getWidth() / 2, bmp.getHeight() / 2);
+        bottleMatrix.postTranslate(((float) -(bmp.getWidth() / 2 - centerX)), -((float) (bmp.getHeight() / 2 - centerY)));
 
         // Set the current position to the updated rotation
 
@@ -182,61 +194,122 @@ public class TruthDareView extends View {
 //        int y = (int) (centerY + Math.sin(Math.toRadians(bottleAngle)) * (radiusBigCircle * 0.85));
 //        canvas.drawLine(((float) centerX), ((float) centerY-y), x, y,arcPaint);
 
-        canvas.drawBitmap(bmp,bottleMatrix,arcPaint);
-        bottleAngle += 30;
+        canvas.drawBitmap(bmp, bottleMatrix, arcPaint);
+
+        if (isTouched) {
+            Log.i("randomRotationNumber", "onDraw: "+randomRotationNumber);
+            Handler mainHandler = new Handler(getContext().getApplicationContext().getMainLooper());
+
+            mainHandler.postDelayed(new Runnable()
+            {
+                public void run()
+                {
+                    Log.i("bottleAngle", "onDraw: "+bottleAngle);
+
+
+                    if (bottleAngle<randomRotationNumber-randomRotationNumber/2) {
+                        postInvalidateDelayed(10);
+                        bottleAngle += 30;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/4){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 20;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/6){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 12;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/8){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 10;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/10){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 8;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/25){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 5;
+                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/30){
+                        postInvalidateDelayed(10);
+                        bottleAngle += 2;
+                    }
+                    else {
+                        identifyWhoAreGoingToPlay(bottleAngle);
+                        isTouched = false;
+
+
+                    }
+                }
+            }, 1);
+
+
+//            isTouched=false;
+
+
+        }
 //        bottleAngle += 30;
 //        postInvalidateDelayed(10);
 
 
-
     }
 
-    private void updateBottle( final int randomRotate){
+    private void identifyWhoAreGoingToPlay(double bottleAngle) {
+        double requesterAngle=bottleAngle % 360 -90;
+        double responderAngle=bottleAngle % 360 +90;
 
-        new Thread(new Runnable() {
-            public void run() {
+        String requester="";
+        String responder="";
 
-                while (bottleAngle<randomRotate){
 
-                    postInvalidateDelayed(1);
 
-                }
+        if (requesterAngle<0)
+            requesterAngle+=360;
 
+        if (responderAngle<0)
+            responderAngle+=360;
+
+
+        if (responderAngle>360)
+            responderAngle=responderAngle%360;
+
+
+
+
+        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: "+requesterAngle + " "+responderAngle);
+        for (Challenger challenger : challengers) {
+            if (challenger.getStartAngle()<requesterAngle && challenger.getEndAngle()>requesterAngle){
+                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: "+challenger.getName());
+                requester=challenger.getName();
             }
-        }).start();
-//        while (bottleAngle<i) {
-//            Log.i("repeatation", "updateBottle: "+i+" "+bottleAngle);
-//
-//
-//            bottleAngle += 30;
-//            postInvalidateDelayed(10);
-//        }
-        bottleAngle = 1;
-//        Log.i("repeatation", "updateBottle: "+i+" "+bottleAngle);
-
-
+            if (challenger.getStartAngle()<responderAngle && challenger.getEndAngle()>responderAngle){
+                responder=challenger.getName();
+            }
+        }
+        Toast.makeText(getContext().getApplicationContext(),String.format("%1$s %2$s %3$s %4$s",requester,"از",responder,"بپرس"),Toast.LENGTH_LONG).show();
     }
 
 
-    private void drawCentralCircle ( Canvas canvas ) {
+    private void drawCentralCircle(Canvas canvas) {
 
         canvas.drawCircle(((float) centerX), ((float) centerY), ((float) (radiusCentralCircle)), centralCirclePaint);
     }
 
     @Override
-    protected void onMeasure ( int widthMeasureSpec, int heightMeasureSpec ) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     }
 
     @Override
-    public boolean onTouchEvent ( MotionEvent event ) {
-        Log.i("sdffe", "onTouchEvent: "+event.getAction());
-        switch (event.getAction()){
-            case    MotionEvent.ACTION_UP:
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i("sdffe", "onTouchEvent: " + event.getAction());
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_UP:
 
-                updateBottle(new Random().nextInt(1000));
-              return false;
+
+
+                bottleAngle=0;
+                isTouched = true;
+                randomRotationNumber = new Random().nextInt(500) + 2000;
+                invalidate();
+                return false;
 
 
             default:
@@ -244,83 +317,57 @@ public class TruthDareView extends View {
         }
     }
 
-    public List < Challenger > getChallengers ( ) {
+    public List<Challenger> getChallengers() {
         return challengers;
     }
 
-    public void setChallengers ( List < Challenger > challengers ) {
+    public void setChallengers(List<Challenger> challengers) {
         this.challengers = challengers;
     }
 
-    private void calculateSwipeAngle ( int numberOfChallengers ) {
-        swipeAngle = ((float) (360 / numberOfChallengers));
+    private void calculateSwipeAngle(int numberOfChallengers) {
+        Log.i("numberOfchallenger", "calculateSwipeAngle: " + numberOfChallengers);
+        swipeAngle = ((360f / numberOfChallengers));
     }
 
 
-    private void populateFake ( ) {
-        challengers.add(new Challenger("علی", Color.LTGRAY));
-        challengers.add(new Challenger("رضا", Color.MAGENTA));
-        challengers.add(new Challenger("حسن", Color.CYAN));
-        challengers.add(new Challenger("وحید", Color.BLUE));
-        challengers.add(new Challenger("حمید", Color.YELLOW));
-        challengers.add(new Challenger("نوید", Color.GREEN));
-        challengers.add(new Challenger("افشین", Color.GRAY));
-        challengers.add(new Challenger("پوریا", Color.RED));
+    private void populateFake() {
+        challengers.add(new Challenger("علی", generateRandomColor()));
+        challengers.add(new Challenger("رضا", generateRandomColor()));
+        challengers.add(new Challenger("حسن", generateRandomColor()));
+        challengers.add(new Challenger("وحید", generateRandomColor()));
+        challengers.add(new Challenger("حمید", generateRandomColor()));
+        challengers.add(new Challenger("نوید", generateRandomColor()));
+        challengers.add(new Challenger("افشین", generateRandomColor()));
+        challengers.add(new Challenger("پوریا", generateRandomColor()));
+        challengers.add(new Challenger("مجید", generateRandomColor()));
+        challengers.add(new Challenger("کامران", generateRandomColor()));
+
+
+
+
     }
 
-    public String getPath ( ) {
+    public String getPath() {
         return TruthDareView.class.getCanonicalName();
     }
 
-    private void calculateScreenPadding ( ) {
+    private void calculateScreenPadding() {
 
         screenPadding = radiusBigCircle / 20;
 
     }
 
+    private int generateRandomColor() {
+        ArrayList<Integer> colors = new ArrayList<>();
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
-    class Challenger {
-        public Challenger ( String name, int color ) {
-            this.name = name;
-            this.color = color;
-
-        }
-
-        String name;
-        int color;
-        double startAngle;
-        double endAngle;
-
-        public String getName ( ) {
-            return name;
-        }
-
-        public void setName ( String name ) {
-            this.name = name;
-        }
-
-        public int getColor ( ) {
+        if (colors.contains(color)) {
+            return generateRandomColor();
+        } else {
+            colors.add(color);
             return color;
-        }
-
-        public void setColor ( int color ) {
-            this.color = color;
-        }
-
-        public double getStartAngle ( ) {
-            return startAngle;
-        }
-
-        public void setStartAngle ( double startAngle ) {
-            this.startAngle = startAngle;
-        }
-
-        public double getEndAngle ( ) {
-            return endAngle;
-        }
-
-        public void setEndAngle ( double endAngle ) {
-            this.endAngle = endAngle;
         }
     }
 
