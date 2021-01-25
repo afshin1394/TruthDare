@@ -13,14 +13,18 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.VelocityTrackerCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class TruthDareView extends View {
@@ -47,7 +51,13 @@ public class TruthDareView extends View {
     private Matrix bottleMatrix;
     private boolean isTouched;
     private int randomRotationNumber;
-    private Challenger tempChallenger;
+    //Timer
+    private TimerTask timerTask;
+    private Timer timer;
+    private Runnable update;
+    private Handler handler;
+//    private static final long DELAY_MS = 2000;
+//    private static final long PERIOD_MS = 10000;
 
 
     public TruthDareView(Context context) {
@@ -77,6 +87,7 @@ public class TruthDareView extends View {
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
 
         bottleMatrix = new Matrix();
+
         //Canvas
         centerX = getWidth() / 2;
         centerY = getHeight() / 2;
@@ -124,23 +135,10 @@ public class TruthDareView extends View {
         if (!isInit)
             init();
 
-
         drawArcs(canvas);
         drawNames(canvas, challengers);
         drawCentralCircle(canvas);
         drawBottle(canvas);
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     private void drawArcs(Canvas canvas) {
@@ -148,12 +146,11 @@ public class TruthDareView extends View {
         for (int i = 0; i < challengers.size(); i++) {
             arcPaint.setColor(challengers.get(i).getColor());
             canvas.drawArc(arcRect, ((float) startAngle), ((float) swipeAngle), true, arcPaint);
-            Log.i("drawArcss", "drawArcs: " + startAngle + " " + (swipeAngle + startAngle));
+            Log.i("drawArcs", "drawArcs: " + startAngle + " " + (swipeAngle + startAngle));
             challengers.get(i).setStartAngle(startAngle);
             challengers.get(i).setEndAngle(startAngle + swipeAngle);
-            Log.i("anglesIn", "startAngle: " + challengers.get(i).getStartAngle() + "endAngle: " + challengers.get(i).getEndAngle());
+            Log.i("drawArcs", "startAngle: " + challengers.get(i).getStartAngle() + "endAngle: " + challengers.get(i).getEndAngle());
             startAngle = startAngle + swipeAngle;
-
         }
 
     }
@@ -162,18 +159,14 @@ public class TruthDareView extends View {
         namePaint.setTextSize(20);
 
         for (Challenger challenger : challengers) {
-
-
             double angle = (challenger.getStartAngle() + challenger.getEndAngle()) / 2;
-
-            Log.i("anglee", "drawNames: " + angle);
+            Log.i("drawNames", "drawNames: " + angle);
             int x = (int) (centerX + Math.cos(Math.toRadians(angle)) * (radiusBigCircle * 0.85));
             int y = (int) (centerY + Math.sin(Math.toRadians(angle)) * (radiusBigCircle * 0.85));
-            Log.i("Cos", "drawNames: " + Math.cos(Math.toRadians(angle)) + " x,y:" + x + "," + y);
+            Log.i("drawNames", "cos: " + Math.cos(Math.toRadians(angle)) + " x,y:" + x + "," + y);
             textRect = new Rect();
-//        textRect.set(100, y- challenger.getName().length(), x + challenger.getName().length()/2, y + challenger.getName().length()/2);
             namePaint.getTextBounds(challenger.getName(), 0, 0, textRect);
-            Log.i("angleeeee", "drawNames: " + ((float) angle));
+            Log.i("drawNames", "drawNames: " + ((float) angle));
             canvas.save();
             canvas.rotate((float) (angle), x, y);
             canvas.drawText(challenger.getName(), x - 6 * (challenger.getName().length()), y, namePaint);
@@ -184,104 +177,92 @@ public class TruthDareView extends View {
 
 
     private void drawBottle(Canvas canvas) {
-        Log.i("ANDLE", "drawBottle: "+bottleAngle);
+        Log.i("drawBottle", "drawBottle: " + bottleAngle);
         bottleMatrix.postRotate(((int) bottleAngle), bmp.getWidth() / 2, bmp.getHeight() / 2);
         bottleMatrix.postTranslate(((float) -(bmp.getWidth() / 2 - centerX)), -((float) (bmp.getHeight() / 2 - centerY)));
 
-        // Set the current position to the updated rotation
-
-//        int x = (int) (centerX + Math.cos(Math.toRadians(bottleAngle)) * (radiusBigCircle * 0.85));
-//        int y = (int) (centerY + Math.sin(Math.toRadians(bottleAngle)) * (radiusBigCircle * 0.85));
-//        canvas.drawLine(((float) centerX), ((float) centerY-y), x, y,arcPaint);
 
         canvas.drawBitmap(bmp, bottleMatrix, arcPaint);
 
         if (isTouched) {
-            Log.i("randomRotationNumber", "onDraw: "+randomRotationNumber);
+
+            Log.i("drawBottle", "onDraw: " + randomRotationNumber);
             Handler mainHandler = new Handler(getContext().getApplicationContext().getMainLooper());
 
-            mainHandler.postDelayed(new Runnable()
-            {
-                public void run()
-                {
-                    Log.i("bottleAngle", "onDraw: "+bottleAngle);
-
-
-                    if (bottleAngle<randomRotationNumber-randomRotationNumber/2) {
+            mainHandler.postDelayed(new Runnable() {
+                public void run() {
+                    Log.i("drawBottle", "onDraw: " + bottleAngle);
+                    if (bottleAngle < randomRotationNumber - randomRotationNumber / 2) {
                         postInvalidateDelayed(10);
                         bottleAngle += 30;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/4){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 4) {
                         postInvalidateDelayed(10);
                         bottleAngle += 20;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/6){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 6) {
                         postInvalidateDelayed(10);
                         bottleAngle += 12;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/8){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 8) {
                         postInvalidateDelayed(10);
                         bottleAngle += 10;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/10){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 10) {
                         postInvalidateDelayed(10);
                         bottleAngle += 8;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/25){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 25) {
                         postInvalidateDelayed(10);
                         bottleAngle += 5;
-                    }else if (bottleAngle<randomRotationNumber -randomRotationNumber/30){
+                    } else if (bottleAngle < randomRotationNumber - randomRotationNumber / 30) {
                         postInvalidateDelayed(10);
                         bottleAngle += 2;
-                    }
-                    else {
+                    } else {
                         identifyWhoAreGoingToPlay(bottleAngle);
                         isTouched = false;
-
-
                     }
                 }
             }, 1);
 
 
-//            isTouched=false;
-
-
         }
-//        bottleAngle += 30;
-//        postInvalidateDelayed(10);
 
 
     }
 
     private void identifyWhoAreGoingToPlay(double bottleAngle) {
-        double requesterAngle=bottleAngle % 360 -90;
-        double responderAngle=bottleAngle % 360 +90;
+        double requesterAngle = bottleAngle % 360 - 90;
+        double responderAngle = bottleAngle % 360 + 90;
 
-        String requester="";
-        String responder="";
-
-
-
-        if (requesterAngle<0)
-            requesterAngle+=360;
-
-        if (responderAngle<0)
-            responderAngle+=360;
+        String requester = "";
+        String responder = "";
 
 
-        if (responderAngle>360)
-            responderAngle=responderAngle%360;
+        if (requesterAngle < 0)
+            requesterAngle += 360;
+
+        if (responderAngle < 0)
+            responderAngle += 360;
 
 
+        if (responderAngle > 360)
+            responderAngle = responderAngle % 360;
 
 
-        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: "+requesterAngle + " "+responderAngle);
+        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + requesterAngle + " " + responderAngle);
         for (Challenger challenger : challengers) {
-            if (challenger.getStartAngle()<requesterAngle && challenger.getEndAngle()>requesterAngle){
-                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: "+challenger.getName());
-                requester=challenger.getName();
+            if (challenger.getStartAngle() < requesterAngle && challenger.getEndAngle() > requesterAngle) {
+                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + challenger.getName());
+                requester = challenger.getName();
+
             }
-            if (challenger.getStartAngle()<responderAngle && challenger.getEndAngle()>responderAngle){
-                responder=challenger.getName();
+            if (challenger.getStartAngle() < responderAngle && challenger.getEndAngle() > responderAngle) {
+                responder = challenger.getName();
+
             }
+
+
         }
-        Toast.makeText(getContext().getApplicationContext(),String.format("%1$s %2$s %3$s %4$s",requester,"از",responder,"بپرس"),Toast.LENGTH_LONG).show();
+        if (requester.isEmpty() || responder.isEmpty())
+            Toast.makeText(getContext().getApplicationContext(), String.format("دوباره بچرخون"), Toast.LENGTH_LONG).show();
+         else
+        Toast.makeText(getContext().getApplicationContext(), String.format("%1$s %2$s %3$s %4$s", requester, "از", responder, "بپرس"), Toast.LENGTH_LONG).show();
     }
 
 
@@ -295,26 +276,82 @@ public class TruthDareView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.i("sdffe", "onTouchEvent: " + event.getAction());
-        switch (event.getAction())
-        {
+        Log.i("onTouchEvent", "onTouchEvent: " + event.getAction());
+        float firstTouchX = 0;
+        float firstTouchY = 0;
+        long firstTouchTime= 0;
+        VelocityTracker mVelocityTracker = VelocityTracker.obtain();
+
+        int index = event.getActionIndex();
+        int action = event.getActionMasked();
+        int pointerId = event.getPointerId(index);
+
+
+        float endTouchX = 0;
+        float endTouchY = 0;
+        long endTouchTime = 0;
+
+        long timeLapTouches = 0;
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if(mVelocityTracker == null) {
+                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+
+                }
+                else {
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+                // Add a user's movement to the tracker.
+                mVelocityTracker.addMovement(event);
+                firstTouchTime=System.currentTimeMillis();
+                firstTouchX = event.getX();
+                firstTouchY = event.getY();
+
+
+
+                Log.i("onTouchEvent", "firstTouchTime: "+firstTouchTime);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mVelocityTracker.addMovement(event);
+                // When you want to determine the velocity, call
+                // computeCurrentVelocity(). Then call getXVelocity()
+                // and getYVelocity() to retrieve the velocity for each pointer ID.
+                mVelocityTracker.computeCurrentVelocity(1000);
+                // Log velocity of pixels per second
+                // Best practice to use VelocityTrackerCompat where possible.
+                Log.d("ACTION_MOVE", "X velocity: " +
+                        VelocityTrackerCompat.getXVelocity(mVelocityTracker,
+                                pointerId));
+                Log.d("ACTION_MOVE", "Y velocity: " +
+                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
+                                pointerId));
+                break;
             case MotionEvent.ACTION_UP:
-
-
-
-                bottleAngle=0;
+                mVelocityTracker.recycle();
+                endTouchTime=System.currentTimeMillis();
+                Log.i("onTouchEvent", "endTouchTime: "+endTouchTime);
+                endTouchX = event.getX();
+                endTouchY = event.getY();
+//                double distance = ( Math.sqrt((endTouchX - firstTouchX) * (endTouchY - firstTouchX) + (endTouchY - firstTouchY) * (firstTouchY - endTouchY)));
+                double distance = Math.sqrt((endTouchX-firstTouchX) * (endTouchX-firstTouchX) + (endTouchY-firstTouchY) * (endTouchY-endTouchY));
+                double hypotDistance = Math.hypot(endTouchX - firstTouchX, endTouchY - firstTouchY);
+                timeLapTouches = endTouchTime-firstTouchTime;
+                Log.i("onTouchEvent", " distance :"+distance+"hypotDistance"+hypotDistance+""+timeLapTouches);
+                double speed = distance / timeLapTouches;
+                Log.i("speed", "speed: "+speed);
+                bottleAngle = 0;
                 isTouched = true;
                 randomRotationNumber = new Random().nextInt(500) + 2000;
                 invalidate();
-                return false;
-
-
+                break;
             default:
-                return true;
+                break;
         }
+        return true;
     }
 
     public List<Challenger> getChallengers() {
@@ -342,10 +379,6 @@ public class TruthDareView extends View {
         challengers.add(new Challenger("پوریا", generateRandomColor()));
         challengers.add(new Challenger("مجید", generateRandomColor()));
         challengers.add(new Challenger("کامران", generateRandomColor()));
-
-
-
-
     }
 
     public String getPath() {
@@ -370,6 +403,10 @@ public class TruthDareView extends View {
             return color;
         }
     }
+
+
+
+
 
 
 }

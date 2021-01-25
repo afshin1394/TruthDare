@@ -1,6 +1,8 @@
 package com.afshin.truthordare;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +13,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TruthDareView truthDareView=new TruthDareView(MainActivity.this);
-        Log.i("Path", "onCreate: "+truthDareView.getPath());
+
+
+
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_navigation);
+//        NavController navController = navHostFragment.getNavController();
+
+
     }
 }

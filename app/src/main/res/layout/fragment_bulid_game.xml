@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BuildGameFragment">
+
+    <TextView
+        android:id="@+id/TV_chooseNumberOfChallengers"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/numberOfChallengers"
+        android:textAlignment="center"
+        android:textSize="@dimen/_14sdp"
+        android:gravity="center_horizontal" />
+    <NumberPicker
+        android:id="@+id/NP_chooseNumberOfChallengers"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TV_chooseNumberOfChallengers"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RV_ChallengerNames"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/NP_chooseNumberOfChallengers"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/introductionFragment">
+    <fragment
+        android:id="@+id/introductionFragment"
+        android:name="com.afshin.truthordare.IntroductionFragment"
+        android:label="fragment_introduction"
+        tools:layout="@layout/fragment_introduction" >
+        <action
+            android:id="@+id/action_introductionFragment_to_bulidGameFragment"
+            app:destination="@id/bulidGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bulidGameFragment"
+        android:name="com.afshin.truthordare.BuildGameFragment"
+        android:label="fragment_bulid_game"
+        tools:layout="@layout/fragment_bulid_game" >
+        <action
+            android:id="@+id/action_bulidGameFragment_to_gameMainFragment"
+            app:destination="@id/gameMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameMainFragment"
+        android:name="com.afshin.truthordare.GameMainFragment"
+        android:label="fragment_game_main"
+        tools:layout="@layout/fragment_game_main" />
+</navigation>
