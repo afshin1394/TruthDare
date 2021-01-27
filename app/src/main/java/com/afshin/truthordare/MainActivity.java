@@ -16,10 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_navigation);
-//        NavController navController = navHostFragment.getNavController();
 
 
     }
+
+
+
 }

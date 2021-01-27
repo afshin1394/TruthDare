@@ -20,7 +20,7 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
     int numberOfEditText;
     ChallengerNameAdapterEvents challengerNameAdapterEvents;
-    Map<Integer,String> dataEntry=new HashMap<>();
+
 
     public ChallengerNameAdapter(int editTextList,ChallengerNameAdapterEvents challengerNameAdapterEvents) {
         this.numberOfEditText = editTextList;
@@ -36,12 +36,12 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderChallengers holder, int position) {
-        Log.i("positionnn", "onBindViewHolder: "+position);
        holder.bind(holder,position);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return numberOfEditText;
     }
 

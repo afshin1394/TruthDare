@@ -46,15 +46,8 @@ public class IntroductionFragment extends Fragment {
 
     @OnClick(R.id.BTN_continue)
     public void navigateToGameBuilder(View view){
-//        NavHostFragment navHostFragment =
-//                (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id);
-//                NavController navController = navHostFragment.getNavController();
-        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-        NavHostFragment navHostFragment =
-                (NavHostFragment) supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-
-        navController.navigate(R.id.action_introductionFragment_to_bulidGameFragment);
+        NavigateUtil navigateUtil=NavigateUtil.getInstance();
+        navigateUtil.navigate(getActivity(),R.id.action_introductionFragment_to_bulidGameFragment,null);
     }
 
 

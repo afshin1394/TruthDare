@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -59,33 +60,31 @@ public class TruthDareView extends View {
 //    private static final long DELAY_MS = 2000;
 //    private static final long PERIOD_MS = 10000;
 
-
+    final float scale = getResources().getDisplayMetrics().density;
     public TruthDareView(Context context) {
         super(context);
-        populateFake();
+
 
     }
 
     public TruthDareView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        populateFake();
 
     }
 
     public TruthDareView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        populateFake();
+
 
 
     }
 
 
     private void init() {
+        Log.i("scale", "init: "+scale);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 3;
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
-
         bottleMatrix = new Matrix();
 
         //Canvas
@@ -97,7 +96,7 @@ public class TruthDareView extends View {
         centerYBitmap = (getHeight() - bmp.getHeight()) / 2;
 
 
-        radiusBigCircle = Math.min(getWidth(), getHeight()) / 2;
+        radiusBigCircle = (Math.min(getWidth(), getHeight()) / 2);
         radiusCentralCircle = radiusBigCircle / 2;
 
         calculateSwipeAngle(challengers.size());
@@ -105,6 +104,7 @@ public class TruthDareView extends View {
 
 
         arcRect = new RectF();
+//        arcRect.set(((float) (radiusCentralCircle * Math.cos(swipeAngle)))/4, ((float) (radiusCentralCircle * Math.sin(swipeAngle)))/4, ((float) (radiusCentralCircle * Math.cos(swipeAngle) + radiusCentralCircle))/4, ((float) (radiusCentralCircle * Math.sin(swipeAngle) + radiusCentralCircle))/4);
         Log.i("reces", "init: " + centerX + " " + centerY + " " + radiusBigCircle);
         arcRect.set(((float) (centerX - radiusBigCircle + screenPadding)), ((float) (centerY - radiusBigCircle + screenPadding)), ((float) (centerX + radiusBigCircle - screenPadding)), ((float) (centerY + radiusBigCircle - screenPadding)));
 
@@ -179,6 +179,7 @@ public class TruthDareView extends View {
     private void drawBottle(Canvas canvas) {
         Log.i("drawBottle", "drawBottle: " + bottleAngle);
         bottleMatrix.postRotate(((int) bottleAngle), bmp.getWidth() / 2, bmp.getHeight() / 2);
+        bottleMatrix.setScale(((float) radiusCentralCircle), ((float) radiusCentralCircle));
         bottleMatrix.postTranslate(((float) -(bmp.getWidth() / 2 - centerX)), -((float) (bmp.getHeight() / 2 - centerY)));
 
 
@@ -391,7 +392,7 @@ public class TruthDareView extends View {
 
     }
 
-    private int generateRandomColor() {
+    public int generateRandomColor() {
         ArrayList<Integer> colors = new ArrayList<>();
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -407,6 +408,19 @@ public class TruthDareView extends View {
 
 
 
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
 
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
 
 }

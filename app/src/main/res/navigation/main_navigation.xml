@@ -26,5 +26,9 @@
         android:id="@+id/gameMainFragment"
         android:name="com.afshin.truthordare.GameMainFragment"
         android:label="fragment_game_main"
-        tools:layout="@layout/fragment_game_main" />
+        tools:layout="@layout/fragment_game_main" >
+        <argument
+            android:name="challengers"
+            app:argType="com.afshin.truthordare.Challenger" />
+    </fragment>
 </navigation>
