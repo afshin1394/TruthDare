@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -15,10 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.afshin.truthordare.databinding.FragmentIntroductionBinding;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,19 +39,16 @@ public class IntroductionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private View view;
-
-
-    @BindView(R.id.BTN_continue)
-    Button btn_continue;
+    private FragmentIntroductionBinding fragmentIntroductionBinding;
 
 
 
 
-    @OnClick(R.id.BTN_continue)
-    public void navigateToGameBuilder(View view){
-        NavigateUtil navigateUtil=NavigateUtil.getInstance();
-        navigateUtil.navigate(getActivity(),R.id.action_introductionFragment_to_bulidGameFragment,null);
-    }
+
+
+
+
+
 
 
 
@@ -83,16 +83,18 @@ public class IntroductionFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        fragmentIntroductionBinding = FragmentIntroductionBinding.inflate(getLayoutInflater(), container, false);
+        fragmentIntroductionBinding.BTNContinue.setOnClickListener(this::navigateToGameBuilder);
 
-        view = inflater.inflate(R.layout.fragment_introduction, container, false);
-        ButterKnife.bind(IntroductionFragment.this,view);
-        Log.i("Viewws", "onCreateView: "+view);
-        return view;
+        return fragmentIntroductionBinding.getRoot();
     }
 
-
+    public void navigateToGameBuilder(View view){
+        NavigateUtil navigateUtil=NavigateUtil.getInstance();
+        navigateUtil.navigate(getActivity(),R.id.action_introductionFragment_to_bulidGameFragment,null);
+    }
 }

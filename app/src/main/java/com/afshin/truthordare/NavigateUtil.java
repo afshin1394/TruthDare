@@ -9,7 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-public class NavigateUtil {
+public class NavigateUtil
+{
 
     private static NavigateUtil instance = null;
     public static NavigateUtil getInstance(){
@@ -21,10 +22,10 @@ public class NavigateUtil {
     public NavigateUtil() {
     }
 
-    public  void navigate(FragmentActivity activity, int destination, Bundle bundle) {
-
-
+    public  void navigate(FragmentActivity activity, int destination, Bundle bundle)
+    {
         FragmentManager supportFragmentManager = activity.getSupportFragmentManager();
+        supportFragmentManager.executePendingTransactions();
         NavHostFragment navHostFragment =
                 (NavHostFragment) supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();

@@ -7,12 +7,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+import com.afshin.truthordare.databinding.ActivityMainBinding;
 
+public class MainActivity extends AppCompatActivity {
+   ActivityMainBinding activityMainBinding;
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
 
