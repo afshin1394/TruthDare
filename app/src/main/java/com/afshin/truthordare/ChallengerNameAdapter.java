@@ -13,11 +13,11 @@ import com.afshin.truthordare.databinding.ChallengerItemviewBinding;
 
 import java.util.List;
 
-public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAdapter.ViewHolderChallengers> implements  ChallengerNameAdapterEvents{
+public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAdapter.ViewHolderChallengers>  {
 
-    int numberOfEditText;
+
     List<Challenger> challengers;
-    ChallengerNameAdapterEvents challengerNameAdapterEvents;
+
 
 
     public ChallengerNameAdapter(List<Challenger> challengers) {
@@ -46,14 +46,12 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
         return challengers != null ? challengers.size() : 0;
     }
 
-    public void setChallengerSize(int numberOfEditText) {
-        this.numberOfEditText = numberOfEditText;
-    }
+    public void setChallengerSize(int j) {
 
-    @Override
-    public void onFocusChange(Challenger challenger) {
 
     }
+
+
 
     class ViewHolderChallengers extends RecyclerView.ViewHolder {
         private final ChallengerItemviewBinding binding;

@@ -4,15 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
-public class Challenger implements Parcelable {
+import java.util.Objects;
 
-        public Challenger ( String name, int color ) {
+public class Challenger extends BaseObservable implements Parcelable {
+    public Challenger() {
+    }
+
+    public Challenger (String name, int color ) {
             this.name = name;
             this.color = color;
         }
 
+        @Bindable
         String name;
+
+
         int color;
         double startAngle;
         double endAngle;
@@ -36,13 +45,22 @@ public class Challenger implements Parcelable {
         }
     };
 
+
+    @Bindable
     public String getName() {
-            return name;
+        return  name != null ? name : "";
         }
 
-        public void setName(String name) {
+    public void setName (@NonNull String name) {
+        if (!Objects.equals(this.name, name)) {
             this.name = name;
+            notifyChange();
         }
+    }
+
+    public boolean isEmpty() {
+        return name == null || name.isEmpty();
+    }
 
         public int getColor() {
             return color;

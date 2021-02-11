@@ -95,6 +95,6 @@ public class IntroductionFragment extends Fragment {
 
     public void navigateToGameBuilder(View view){
         NavigateUtil navigateUtil=NavigateUtil.getInstance();
-        navigateUtil.navigate(getActivity(),R.id.action_introductionFragment_to_bulidGameFragment,null);
+        navigateUtil.navigate(getActivity(),R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
     }
 }

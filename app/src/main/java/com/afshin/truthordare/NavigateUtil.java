@@ -22,15 +22,15 @@ public class NavigateUtil
     public NavigateUtil() {
     }
 
-    public  void navigate(FragmentActivity activity, int destination, Bundle bundle)
+    public  void navigate(FragmentActivity activity, int actionId, Bundle bundle,int hostId)
     {
         FragmentManager supportFragmentManager = activity.getSupportFragmentManager();
         supportFragmentManager.executePendingTransactions();
         NavHostFragment navHostFragment =
-                (NavHostFragment) supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
+                (NavHostFragment) supportFragmentManager.findFragmentById(hostId);
         NavController navController = navHostFragment.getNavController();
 
-        navController.navigate(destination, bundle, NavigationOption.getNavOptions());
+        navController.navigate(actionId, bundle, NavigationOption.getNavOptions());
     }
 }
 

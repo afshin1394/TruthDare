@@ -2,10 +2,13 @@ package com.afshin.truthordare;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.function.Consumer;
 
 
 /**
@@ -53,28 +56,30 @@ public class BuildGameFragment extends Fragment implements NumberPicker.OnValueC
     FragmentBulidGameBinding fragmentBulidGameBinding;
 
 
+    private void chooseNumberOfChallengersTVClick() {
 
-
-    public void chooseNumberOfChallengersTVClick()
-    {
-        ArrayList<Challenger> challengers = new ArrayList<>();
-
-        if (challengerNames.size() < challengerNameAdapter.getItemCount()) {
-            Toast.makeText(getActivity(), "نام همه بازیکنان را وارد کنید", Toast.LENGTH_LONG).show();
-        } else {
-            TruthDareView truthDareView = new TruthDareView(getActivity());
-            for (Integer key : challengerNames.keySet()) {
-                Log.i("challengerNames", "chooseNumberOfChallengersTVClick: " + key + " " + challengerNames.get(key));
-                Challenger challenger = new Challenger(challengerNames.get(key), truthDareView.generateRandomColor());
-                challengers.add(challenger);
-            }
-
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("challengers", challengers);
-            NavigateUtil navigateUtil = NavigateUtil.getInstance();
-            navigateUtil.navigate(getActivity(), R.id.action_bulidGameFragment_to_gameMainFragment, bundle);
-        }
+//        ArrayList<Challenger> challengers = new ArrayList<>();
+//
+//        if (challengerNames.size() < challengerNameAdapter.getItemCount())
+//        {
+//            Toast.makeText(getActivity(), "نام همه بازیکنان را وارد کنید", Toast.LENGTH_LONG).show();
+//        }
+//        else
+//            {
+//            TruthDareView truthDareView = new TruthDareView(getActivity());
+//            for (Integer key : challengerNames.keySet())
+//            {
+//                Log.i("challengerNames", "chooseNumberOfChallengersTVClick: " + key + " " + challengerNames.get(key));
+//                Challenger challenger = new Challenger(challengerNames.get(key), truthDareView.generateRandomColor());
+//                challengers.add(challenger);
+//            }
+//
+//
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelableArrayList("challengers", challengers);
+//            NavigateUtil navigateUtil = NavigateUtil.getInstance();
+//            navigateUtil.navigate(getActivity(), R.id.action_bulidGameFragment_to_gameMainFragment, bundle,R.id.nav_host_fragment);
+//        }
     }
 
     public BuildGameFragment() {
@@ -95,70 +100,79 @@ public class BuildGameFragment extends Fragment implements NumberPicker.OnValueC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        fragmentBulidGameBinding = fragmentBulidGameBinding.inflate(getLayoutInflater(), container, false);
-
-        initializeNumberPicker();
-        initializeRecyclerView();
+        fragmentBulidGameBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bulid_game, container, false);
         return fragmentBulidGameBinding.getRoot();
     }
 
-    private void initializeNumberPicker()
-    {
-        fragmentBulidGameBinding.NPChooseNumberOfChallengers.setMinValue(3);
-        fragmentBulidGameBinding.NPChooseNumberOfChallengers.setMinValue(24);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initializeNumberPicker();
+        initializeRecyclerView();
+        fragmentBulidGameBinding.TVChooseNumberOfChallengers.setOnClickListener(this::chooseNumberOfChallengersTVClick);
+    }
+
+    private void chooseNumberOfChallengersTVClick(View view) {
+        challengers.forEach(new Consumer<Challenger>() {
+            @Override
+            public void accept(Challenger challenger) {
+                Log.i("challengerNames", "accept: " + challenger.getName());
+            }
+        });
+
+    }
+
+
+    private void initializeNumberPicker() {
+
+        NumberPicker numberPicker = fragmentBulidGameBinding.NPChooseNumberOfChallengers;
+        numberPicker.setMinValue(3);
+        numberPicker.setMaxValue(26);
+        Log.d("fragmentBuild", "initializeNumberPicker: " + numberPicker.getMaxValue() + "\n" + numberPicker.getMinValue() + "\n");
         fragmentBulidGameBinding.NPChooseNumberOfChallengers.setOnValueChangedListener(this::onValueChange);
     }
 
     private void initializeRecyclerView() {
+        for (int i = 0; i < 3; i++) {
+            Challenger challenger = new Challenger();
+            challengers.add(challenger);
+        }
         challengerNameAdapter = new ChallengerNameAdapter(challengers);
-        challengerNameAdapter = new ChallengerNameAdapter(challengers);
-        fragmentBulidGameBinding.setChallengerNameAdapter(challengerNameAdapter);
-//        RV_ChallengerNames.setLayoutManager(linearLayoutManager);
-//        RV_ChallengerNames.setAdapter(challengerNameAdapter);
+        fragmentBulidGameBinding.RVChallengerNames.setLayoutManager(new LinearLayoutManager(getActivity()));
+        fragmentBulidGameBinding.RVChallengerNames.setAdapter(challengerNameAdapter);
     }
 
     @Override
     public void onValueChange(NumberPicker numberPicker, int i, int i1)
     {
-//        challengerNames.clear();
-//        clearEditTexts(editTextList);
+
         Log.i("valueChange", "onValueChange: " + i1);
-        challengerNameAdapter.setChallengerSize(i1);
-        challengerNameAdapter.notifyDataSetChanged();
-    }
+        if (i1 > i) {
+            Log.i("onValueChange", "i1 > inewValue: "+i1);
+            for (int j = i; j < i1; j++)
+            {
+                Challenger challenger = new Challenger();
+                challengers.add(challenger);
+                Log.i("onValueChange", "adding: "+challengers.size());
+                challengerNameAdapter.notifyItemInserted(challengers.size()-1);
+            }
+        } else {
+            Log.i("onValueChange", "i1 < inewValue: "+i1);
+            for (int j = i; j > i1; j--) {
+                Log.i("onValueChange", "removing: "+challengers.get(challengers.size() - 1));
+                challengers.remove(challengers.size() - 1);
+                challengerNameAdapter.notifyItemRemoved(challengers.size()-1);
+                Log.i("onValueChange", "i1 < inewValue: "+i1);
 
-
-//    @Override
-//    public void onFocusChange(EditText editText, int position) {
-//        editTextList = new ArrayList<>();
-//        editTextList.add(editText);
-//        editText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                Log.i("afterTextChanged", "afterTextChanged: " + editable.toString() + " " + position);
-//                if (challengerNames.containsKey(position)) {
-//                    challengerNames.replace(position, editable.toString());
-//                } else {
-//                    challengerNames.put(position, editable.toString());
-//                }
-//
-//            }
-//        });
-//    }
-
-    private void clearEditTexts(ArrayList<EditText> editTextList) {
-        for (EditText editText : editTextList) {
-            editText.getText().clear();
+            }
         }
-    }
+       challengers.forEach(new Consumer<Challenger>() {
+           @Override
+           public void accept(Challenger challenger) {
+               Log.i("challengers", "accept: "+challenger.toString());
+           }
+       });
+   }
+
+
 }
