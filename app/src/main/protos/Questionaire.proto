@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option csharp_namespace = "TruthDareGrpcService.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "QuestionaireProto";
+option objc_class_prefix = "HLW";
+
+service Questionaire {
+
+  rpc GetAllQuestions (QuestionRequest) returns (QuestionResponse);
+  rpc InsertQuestion (InsertingQuestion) returns (StatusMessageQuestion);
+  rpc DeleteByIDQuestion (QuestionID) returns (StatusMessageQuestion);
+  rpc DeleteByNameQuestion (Question) returns (StatusMessageQuestion);
+  rpc GetQuestionsByCategoryID (CategoryIDRequest) returns (QuestionResponse);
+
+
+}
+message CategoryIDRequest{
+  int32 CategoryIDRequest = 1;
+}
+
+// The request message containing the user's name.
+message QuestionRequest {
+
+}
+
+message QuestionResponse {
+  repeated Question questionList = 1;
+}
+
+message StatusMessageQuestion {
+  string message = 1;
+}
+
+
+
+// The response message containing the greetings.
+message Question {
+  int32 Id = 1;
+  int32 CategoryID = 2;
+  string CategoryName = 3;
+  string QuestionStr = 4;
+}
+
+message InsertingQuestion {
+
+  string CategoryID = 1;
+  string questionStr = 2;
+}
+
+message QuestionID {
+
+  int32 Id =  1;
+}

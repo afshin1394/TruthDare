@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameMainFragment">
+    android:background="@color/specPurpleLight"
+    tools:context=".MVVM.UI.Fragments.GameMainFragment">
 
-<com.afshin.truthordare.TruthDareView
+<com.afshin.truthordare.CustomViews.TruthDareView
     android:id="@+id/CV_truthOrDare"
+    android:background="@color/specPurpleLight"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 

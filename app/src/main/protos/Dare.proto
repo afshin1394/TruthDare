@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option csharp_namespace = "TruthDareGrpcService.Dare.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DareProto";
+option objc_class_prefix = "HLW";
+
+service Dare {
+
+  rpc GetAllDares (DareRequest) returns (DareResponse);
+  rpc InsertDare (InsertingDare) returns (StatusMessageDare);
+  rpc DeleteByIDDare (DareID) returns (StatusMessageDare);
+  rpc DeleteByNameDare (DareModel) returns (StatusMessageDare);
+  rpc GetDaresByCategoryId (CaregoryIDRequest) returns (DareResponse);
+
+
+}
+
+// The request message containing the user's name.
+
+message CaregoryIDRequest{
+  int32 CategoryIDRequest = 1;
+}
+
+
+message DareRequest {
+
+}
+
+message DareResponse {
+  repeated DareModel DareList = 1;
+}
+
+message StatusMessageDare {
+  string message = 1;
+}
+
+
+
+// The response message containing the greetings.
+message DareModel {
+  int32 Id = 1;
+  int32 CategoryID = 2;
+  string CategoryName = 3;
+  string DareStr = 4;
+
+}
+
+message InsertingDare {
+
+  string CategoryID = 1;
+  string DareStr = 2;
+}
+
+message DareID {
+
+  int32 Id =  1;
+}

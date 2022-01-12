@@ -6,7 +6,7 @@
     app:startDestination="@id/introductionFragment">
     <fragment
         android:id="@+id/introductionFragment"
-        android:name="com.afshin.truthordare.IntroductionFragment"
+        android:name="com.afshin.truthordare.MVVM.UI.Fragments.IntroductionFragment"
         android:label="fragment_introduction"
         tools:layout="@layout/fragment_introduction" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/bulidGameFragment"
-        android:name="com.afshin.truthordare.BuildGameFragment"
+        android:name="com.afshin.truthordare.MVVM.UI.Fragments.BuildGameFragment"
         android:label="fragment_bulid_game"
         tools:layout="@layout/fragment_bulid_game" >
         <action
@@ -24,11 +24,28 @@
     </fragment>
     <fragment
         android:id="@+id/gameMainFragment"
-        android:name="com.afshin.truthordare.GameMainFragment"
+        android:name="com.afshin.truthordare.MVVM.UI.Fragments.GameMainFragment"
         android:label="fragment_game_main"
         tools:layout="@layout/fragment_game_main" >
         <argument
             android:name="challengers"
             app:argType="com.afshin.truthordare.Challenger" />
+        <action
+            android:id="@+id/action_gameMainFragment_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/gameChoiceFragment"
+        android:name="com.afshin.truthordare.MVVM.UI.Fragments.GameChoiceFragment"
+        android:label="fragment_game_choice"
+        tools:layout="@layout/fragment_game_choice" >
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_actionsFragment"
+            app:destination="@id/actionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/actionsFragment"
+        android:name="com.afshin.truthordare.MVVM.UI.Fragments.ActionsFragment"
+        android:label="fragment_action"
+        tools:layout="@layout/fragment_action" />
 </navigation>

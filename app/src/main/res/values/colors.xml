@@ -3,4 +3,20 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+
+    <color name="mauve">#CAA8F5</color>
+    <color name="mediumPurple">#9984D4</color>
+    <color name="KSUPurple">#592E83</color>
+    <color name="blastOfBronze">#230C33</color>
+
+    <color name="specPurpleDark">#361f77</color>
+    <color name="specPurpleLight">#441e8f</color>
+
+    <color name="white">#7CFFFFFF</color>
+    <color name="strongWhite">#FFFFFF</color>
+    <color name="flame">#E25822</color>
+
+
+    <color name="Text1">#03DAC5</color>
 </resources>

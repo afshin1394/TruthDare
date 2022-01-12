@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MVVM.UI.Activities.MainActivity">
 
 
         <androidx.fragment.app.FragmentContainerView
@@ -22,7 +22,7 @@
             android:layout_height="match_parent" />
 
 
-        <!--<com.afshin.truthordare.TruthDareView-->
+        <!--<com.afshin.truthordare.CustomViews.TruthDareView-->
         <!--    android:layout_width="match_parent"-->
         <!--    android:layout_height="match_parent"/>-->
 

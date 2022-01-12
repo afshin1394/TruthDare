@@ -2,63 +2,92 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:background="@color/specPurpleLight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:id="@+id/CST_chooseChallengerNumber"
+        tools:context=".MVVM.UI.Fragments.BuildGameFragment">
 
-    <data>
-        <variable
-            name="challengers"
-            type="com.afshin.truthordare.Challenger" />
-    </data>
+            <TextView
+                android:background="@drawable/white_bordered"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintWidth_percent="0.2"
+                android:id="@+id/TV_chooseNumberOfChallengers"
+                android:layout_width="0dp"
+                android:textDirection="rtl"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layoutDirection="rtl"
+                android:text="@string/numberOfChallengers"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:padding="@dimen/_2sdp"
+                android:textSize="@dimen/_14sdp" />
+
+
+            <Spinner
+                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintRight_toLeftOf="@id/TV_chooseNumberOfChallengers"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_width="0dp"
+                android:id="@+id/SP_numberOfChallengers"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                style="@style/spinner_style"
+                />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                app:layout_constraintTop_toBottomOf="@id/CST_chooseChallengerNumber"
+                android:id="@+id/RV_ChallengerNames"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="@dimen/_6sdp"
+                android:background="@drawable/white_bordered"
+                app:layout_constraintHeight_percent="0.8"
+                />
+
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".BuildGameFragment">
+        android:background="@drawable/white_bordered"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toBottomOf="@id/RV_ChallengerNames"
+        android:layout_height="0dp">
 
-        <NumberPicker
-            android:id="@+id/NP_chooseNumberOfChallengers"
-            android:fontFamily="@font/iransans"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/TV_chooseNumberOfChallengers"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/RV_ChallengerNames"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top" />
+    <Button
 
-        <TextView
-            android:fontFamily="@font/iransans"
-            android:id="@+id/TV_chooseNumberOfChallengers"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/NP_chooseNumberOfChallengers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/numberOfChallengers"
-            android:textAlignment="center"
-            android:textSize="@dimen/_14sdp"
-            android:gravity="center_horizontal" />
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineStartScreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.0" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RV_ChallengerNames"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/NP_chooseNumberOfChallengers"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
-            />
-
-
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/BTN_startGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/button_style"
+        android:paddingLeft="@dimen/_60sdp"
+        android:paddingRight="@dimen/_60sdp"
+        android:text="@string/startGame"
+        android:textColor="#fff"
+        android:textSize="@dimen/_16sdp"
+         />
     </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

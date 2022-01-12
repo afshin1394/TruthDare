@@ -2,6 +2,12 @@
     <string name="app_name">TruthORDare</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="numberOfChallengers">تعداد بازیکنان</string>
+    <string name="numberOfChallengers">تعداد بازیکنان:</string>
     <string name="challengerNameItemView">نام بازیکن</string>
+    <string name="startGame">شروع بازی</string>
+    <string name="dare">جرئت</string>
+    <string name="Truth">حقیقت</string>
+    <string name="WhatDoYouChoose">کدومو انتخاب می کنی؟</string>
+    <string name="ask">بپرس</string>
+    <string name="swipeAgain">دوباره بچرخون</string>
 </resources>

@@ -1,0 +1,11 @@
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+    android:background="@drawable/drop_down_item_style"
+
+    android:textColor="#fff"
+    android:textAlignment="center"
+    android:textSize="@dimen/_16sdp"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>
+
+
