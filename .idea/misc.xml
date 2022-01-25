@@ -10,6 +10,7 @@
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/drop_down_item_style.xml" value="0.67" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/edittext_style.xml" value="0.10572916666666667" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_arrow_down.xml" value="0.1375" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_cat_background.xml" value="0.21296296296296297" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_checked.xml" value="0.2734375" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_error.xml" value="0.2734375" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_exclamation.xml" value="0.2734375" />
@@ -26,13 +27,15 @@
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_action.xml" value="0.1765625" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_bulid_game.xml" value="0.3182374541003672" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_dare.xml" value="0.25729166666666664" />
-        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_choice.xml" value="0.1515837104072398" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_choice.xml" value="0.34074074074074073" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_main.xml" value="0.175" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_introduction.xml" value="0.175" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_truth.xml" value="0.25729166666666664" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/game_choice_item.xml" value="0.17" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/toast_message.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/mipmap-anydpi-v26/ic_bottle1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/mipmap-anydpi-v26/ic_cat.xml" value="0.21296296296296297" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/mipmap-anydpi-v26/ic_cat_round.xml" value="0.21296296296296297" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/mipmap-anydpi-v26/ic_simplebottle.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/mipmap-anydpi-v26/ic_simplebottle_round.xml" value="0.1" />
       </map>

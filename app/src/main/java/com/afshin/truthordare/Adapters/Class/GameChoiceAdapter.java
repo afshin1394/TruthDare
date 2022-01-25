@@ -14,16 +14,17 @@ import com.afshin.truthordare.R;
 import com.afshin.truthordare.databinding.GameChoiceItemBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameChoiceAdapter extends RecyclerView.Adapter<GameChoiceAdapter.ViewHolderGameChoice> {
 
- private ArrayList<GameChoiceModel> gameChoiceModels;
+ private List<GameChoiceModel> gameChoiceModels;
  private Context context;
  private IGameChoiceAdapter iGameChoiceAdapter;
 
 
-    public GameChoiceAdapter( Context context,ArrayList<GameChoiceModel> gameChoiceModels,IGameChoiceAdapter iGameChoiceAdapter) {
+    public GameChoiceAdapter( Context context,List<GameChoiceModel> gameChoiceModels,IGameChoiceAdapter iGameChoiceAdapter) {
         this.gameChoiceModels = gameChoiceModels;
         this.context = context;
         this.iGameChoiceAdapter =iGameChoiceAdapter;
@@ -68,8 +69,9 @@ public class GameChoiceAdapter extends RecyclerView.Adapter<GameChoiceAdapter.Vi
         }
 
         public void bind(GameChoiceModel gameChoiceModel) {
-            binding.IMGChoice.setImageResource(gameChoiceModel.getGameChoiceImage());
-            binding.TVChoice.setText(gameChoiceModel.getGameChoiceName());
+
+            binding.IMGChoice.setImageResource(gameChoiceModel.getImage());
+            binding.TVChoice.setText(gameChoiceModel.getBody());
 
         }
 

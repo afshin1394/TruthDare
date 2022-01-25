@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.Challenger;
+import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.CustomViews.Toast;
 import com.afshin.truthordare.Utils.Enums.ToastType;
@@ -69,10 +72,10 @@ public class GameMainFragment extends Fragment {
         truthDareView.setITruthDare(new TruthDareView.ITruthDare() {
             @Override
             public void onResult(Challenger requester, Challenger responder) {
+
                 if (requester==null || responder==null)
                 Toast.showToast(context, ToastType.INFO, ToastDuration.SHORT,getString(R.string.swipeAgain));
                 else {
-
 
                     FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                     Bundle args = new Bundle();

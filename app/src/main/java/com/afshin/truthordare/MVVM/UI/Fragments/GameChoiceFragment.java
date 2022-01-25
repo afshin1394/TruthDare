@@ -1,5 +1,7 @@
 package com.afshin.truthordare.MVVM.UI.Fragments;
 
+import static com.afshin.truthordare.Utils.Enums.ToastType.ERROR;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +21,13 @@ import android.view.ViewGroup;
 
 import com.afshin.truthordare.Adapters.Class.GameChoiceAdapter;
 import com.afshin.truthordare.BaseApplication;
+import com.afshin.truthordare.CustomViews.Toast;
 import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
 import com.afshin.truthordare.Models.GameChoiceModel;
 import com.afshin.truthordare.R;
+import com.afshin.truthordare.Service.Pojo.Questions;
+import com.afshin.truthordare.Service.Responses.BaseResponse;
+import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.databinding.FragmentGameChoiceBinding;
 import com.saphamrah.protos.DareModel;
 import com.saphamrah.protos.DareResponse;
@@ -34,14 +41,16 @@ public class GameChoiceFragment extends DialogFragment {
 
     private FragmentGameChoiceBinding fragmentIntroductionBinding;
     private GameChoiceAdapter gameChoiceAdapter;
-    private ArrayList<GameChoiceModel> gameChoiceModels;
     private Context context;
     private String responder;
     private String requester;
     private GameChoiceViewModel gameChoiceViewModel;
+
     public GameChoiceFragment() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -69,34 +78,39 @@ public class GameChoiceFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializeGameChoiceModels();
         fragmentIntroductionBinding.TVTitle.setText(String.format("%1$s %2$s %3$s %4$s", requester , "از", responder,context.getResources().getString(R.string.ask)));
         fragmentIntroductionBinding.TVTitle.setGravity(Gravity.CENTER);
+
+        gameChoiceViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(GameChoiceViewModel.class);
+        gameChoiceViewModel.getTruthOrDare();
+        gameChoiceViewModel.getGameChoices().observe(getViewLifecycleOwner(), this::setAdapter);
+
+        gameChoiceViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
+            Toast.showToast(getActivity(),ERROR, ToastDuration.SHORT,error.getMessage());
+        });
+
+
+    }
+
+
+    private void setAdapter(List<GameChoiceModel> gameChoiceModels){
+
+
         //      fragmentIntroductionBinding.TVTitle.setText(String.format("%1$s %2$s",responder,context.getResources().getString(R.string.WhatDoYouChoose)));
         gameChoiceAdapter = new GameChoiceAdapter(context, gameChoiceModels, gameChoiceModel -> {
+          switch (gameChoiceModel.getId()){
+              case 1001:
+                 gameChoiceViewModel.getQuestions();
+                  break;
 
+              case 2001:
+                 gameChoiceViewModel.getDares();
+                  break;
+          }
         });
-        fragmentIntroductionBinding.RVGameChoice.setVisibility(View.VISIBLE);
         fragmentIntroductionBinding.RVGameChoice.setLayoutManager(new GridLayoutManager(context,2));
         fragmentIntroductionBinding.RVGameChoice.setAdapter(gameChoiceAdapter);
-
     }
 
-    private void initializeGameChoiceModels()
-    {
-        gameChoiceModels = new ArrayList<>();
-        GameChoiceModel gameChoiceModel1 = new GameChoiceModel();
-        gameChoiceModel1.setGameChoiceId(1);
-        gameChoiceModel1.setGameChoiceImage(R.drawable.dare);
-        gameChoiceModel1.setGameChoiceName(getString(R.string.dare));
 
-
-        GameChoiceModel gameChoiceModel2 = new GameChoiceModel();
-        gameChoiceModel2.setGameChoiceId(2);
-        gameChoiceModel2.setGameChoiceImage(R.drawable.truth);
-        gameChoiceModel2.setGameChoiceName(getString(R.string.Truth));
-
-        gameChoiceModels.add(gameChoiceModel1);
-        gameChoiceModels.add(gameChoiceModel2);
-    }
 }

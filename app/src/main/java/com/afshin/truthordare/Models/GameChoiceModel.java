@@ -1,41 +1,42 @@
 package com.afshin.truthordare.Models;
 
+import android.graphics.drawable.Drawable;
+
 public class GameChoiceModel {
+    private int id;
+    private String title;
+    private String body;
+    private int image;
 
-    private int gameChoiceId;
-    private String gameChoiceName;
-    private int gameChoiceImage;
-    private String gameChoiceDescription;
-
-    public int getGameChoiceId() {
-        return gameChoiceId;
+    public int getId() {
+        return id;
     }
 
-    public void setGameChoiceId(int gameChoiceId) {
-        this.gameChoiceId = gameChoiceId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getGameChoiceName() {
-        return gameChoiceName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setGameChoiceName(String gameChoiceName) {
-        this.gameChoiceName = gameChoiceName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getGameChoiceImage() {
-        return gameChoiceImage;
+    public String getBody() {
+        return body;
     }
 
-    public void setGameChoiceImage(int gameChoiceImage) {
-        this.gameChoiceImage = gameChoiceImage;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public String getGameChoiceDescription() {
-        return gameChoiceDescription;
+    public int getImage() {
+        return image;
     }
 
-    public void setGameChoiceDescription(String gameChoiceDescription) {
-        this.gameChoiceDescription = gameChoiceDescription;
+    public void setImage(int image) {
+        this.image = image;
     }
 }
