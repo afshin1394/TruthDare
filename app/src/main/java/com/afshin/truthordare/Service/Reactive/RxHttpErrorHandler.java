@@ -32,7 +32,10 @@ public class RxHttpErrorHandler {
                         String message = "";
 
                         RxProperties.HttpErrorCode httpErrorCode = RxProperties.VerifyHttpError(t);
-                        if (!httpErrorCode.equals(RxProperties.HttpErrorCode.Success)) {
+                        if (httpErrorCode.equals(RxProperties.HttpErrorCode.Success)) {
+                            return Single.just(t);
+
+                        }
 
                             switch (httpErrorCode) {
                                 case Bad_Gateway:
@@ -87,8 +90,8 @@ public class RxHttpErrorHandler {
                                     break;
                             }
                             throw new Exception(new Throwable(message, new Throwable(t.raw().request().url().toString())));
-                        }
-                        return Single.just(t);
+
+
                     }).retryWhen(new RetryWithDelay(3, 2000));
         };
 

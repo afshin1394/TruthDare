@@ -36,7 +36,7 @@ public  class QuestionRepository {
    public Single<BaseResponse<Questions>> getQuestions() {
        return   apiService.getAllQuestions()
                .compose(RxHttpErrorHandler.parseHttpErrors())
-               .subscribeOn(Schedulers.io())
+               .subscribeOn(Schedulers.single())
                .map(Response::body);
    }
 

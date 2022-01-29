@@ -61,7 +61,7 @@ public class GameChoiceAdapter extends RecyclerView.Adapter<GameChoiceAdapter.Vi
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.TVChoice.setOnClickListener(v-> {
+            binding.getRoot().setOnClickListener(v-> {
                 iGameChoiceAdapter.onChoose(gameChoiceModels.get(getAdapterPosition()));
             });
             binding.executePendingBindings();
@@ -70,8 +70,16 @@ public class GameChoiceAdapter extends RecyclerView.Adapter<GameChoiceAdapter.Vi
 
         public void bind(GameChoiceModel gameChoiceModel) {
 
-            binding.IMGChoice.setImageResource(gameChoiceModel.getImage());
-            binding.TVChoice.setText(gameChoiceModel.getBody());
+            if (gameChoiceModel.getId() == 1001 || gameChoiceModel.getId() == 2001) {
+                binding.IMGChoice.setImageResource(gameChoiceModel.getImage());
+                binding.TVChoice.setText(gameChoiceModel.getBody());
+                binding.TVChoice.setTextSize(20);
+
+            }else{
+                binding.TVChoice.setText(gameChoiceModel.getBody());
+                binding.TVChoice.setTextSize(16);
+                binding.TVChoice.setPadding(5,5,5,5);
+            }
 
         }
 

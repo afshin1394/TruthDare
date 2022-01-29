@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -40,7 +41,6 @@ import java.util.List;
 public class GameChoiceFragment extends DialogFragment {
 
     private FragmentGameChoiceBinding fragmentIntroductionBinding;
-    private GameChoiceAdapter gameChoiceAdapter;
     private Context context;
     private String responder;
     private String requester;
@@ -65,7 +65,6 @@ public class GameChoiceFragment extends DialogFragment {
         responder = getArguments().getString("responder","");
         requester = getArguments().getString("requester","");
 
-
     }
 
     @Override
@@ -78,10 +77,13 @@ public class GameChoiceFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.rounded_drawable);
+        gameChoiceViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(GameChoiceViewModel.class);
+
+
         fragmentIntroductionBinding.TVTitle.setText(String.format("%1$s %2$s %3$s %4$s", requester , "از", responder,context.getResources().getString(R.string.ask)));
         fragmentIntroductionBinding.TVTitle.setGravity(Gravity.CENTER);
 
-        gameChoiceViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(GameChoiceViewModel.class);
         gameChoiceViewModel.getTruthOrDare();
         gameChoiceViewModel.getGameChoices().observe(getViewLifecycleOwner(), this::setAdapter);
 
@@ -94,22 +96,25 @@ public class GameChoiceFragment extends DialogFragment {
 
 
     private void setAdapter(List<GameChoiceModel> gameChoiceModels){
+        GameChoiceAdapter gameChoiceAdapter = new GameChoiceAdapter(context, gameChoiceModels, gameChoiceModel -> {
+            switch (gameChoiceModel.getId()){
+                case 1001:
+                    gameChoiceViewModel.getAllCategories();
+                    gameChoiceViewModel.getQuestions();
+                    break;
 
+                case 2001:
+                    gameChoiceViewModel.getDares();
+                    break;
+            }
+        });
+
+        fragmentIntroductionBinding.RVGameChoice.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL,false));
+        fragmentIntroductionBinding.RVGameChoice.setAdapter(gameChoiceAdapter);
 
         //      fragmentIntroductionBinding.TVTitle.setText(String.format("%1$s %2$s",responder,context.getResources().getString(R.string.WhatDoYouChoose)));
-        gameChoiceAdapter = new GameChoiceAdapter(context, gameChoiceModels, gameChoiceModel -> {
-          switch (gameChoiceModel.getId()){
-              case 1001:
-                 gameChoiceViewModel.getQuestions();
-                  break;
 
-              case 2001:
-                 gameChoiceViewModel.getDares();
-                  break;
-          }
-        });
-        fragmentIntroductionBinding.RVGameChoice.setLayoutManager(new GridLayoutManager(context,2));
-        fragmentIntroductionBinding.RVGameChoice.setAdapter(gameChoiceAdapter);
+        Log.i("adapterItems", "setAdapter: "+fragmentIntroductionBinding.RVGameChoice.getAdapter().getItemCount());
     }
 
 

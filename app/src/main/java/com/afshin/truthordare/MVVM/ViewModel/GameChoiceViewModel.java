@@ -1,6 +1,7 @@
 package com.afshin.truthordare.MVVM.ViewModel;
 
 import android.app.Application;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.Models.GameChoiceModel;
 import com.afshin.truthordare.R;
+import com.afshin.truthordare.Repository.CategoryRepository;
 import com.afshin.truthordare.Repository.DareRepository;
 import com.afshin.truthordare.Repository.QuestionRepository;
+import com.afshin.truthordare.Service.Pojo.Categories;
 import com.afshin.truthordare.Service.Pojo.Dares;
 import com.afshin.truthordare.Service.Pojo.Questions;
 import com.afshin.truthordare.Service.Responses.BaseResponse;
@@ -28,6 +31,7 @@ import io.grpc.stub.StreamObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import retrofit2.Response;
 
 public class GameChoiceViewModel extends AndroidViewModel {
     MutableLiveData<List<GameChoiceModel>> gameChoices = new MutableLiveData<>();
@@ -75,9 +79,9 @@ public class GameChoiceViewModel extends AndroidViewModel {
 
     public void getDares() {
         DareRepository.Instance().getDares()
-                .map((Function<BaseResponse<Dares>, List<GameChoiceModel>>) questionsBaseResponse -> {
+                .map((Function<BaseResponse<Dares>, List<GameChoiceModel>>) daresBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
-                    for (Dares dares : questionsBaseResponse.getResult()) {
+                    for (Dares dares : daresBaseResponse.getResult()) {
                         GameChoiceModel gameChoiceModel = new GameChoiceModel();
                         gameChoiceModel.setId(dares.getCategoryID());
                         gameChoiceModel.setTitle(dares.getCategoryName());
@@ -94,6 +98,7 @@ public class GameChoiceViewModel extends AndroidViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<GameChoiceModel> gameChoiceModels) {
+
                         gameChoices.postValue(gameChoiceModels);
                     }
 
@@ -108,19 +113,55 @@ public class GameChoiceViewModel extends AndroidViewModel {
         List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
         GameChoiceModel gameChoiceModel = new GameChoiceModel();
         gameChoiceModel.setId(1001);
-        gameChoiceModel.setTitle("حقیقت");
-        gameChoiceModel.setImage(R.drawable.cat);
+        gameChoiceModel.setBody("حقیقت");
+        gameChoiceModel.setImage(R.drawable.mon_yellow);
 
         GameChoiceModel gameChoiceModel2 = new GameChoiceModel();
-        gameChoiceModel.setId(2001);
-        gameChoiceModel.setTitle("جرئت");
-        gameChoiceModel.setImage(R.drawable.hammer);
+        gameChoiceModel2.setId(2001);
+        gameChoiceModel2.setBody("جرئت");
+        gameChoiceModel2.setImage(R.drawable.mon_red);
 
         gameChoiceModels.add(gameChoiceModel);
         gameChoiceModels.add(gameChoiceModel2);
 
         gameChoices.setValue(gameChoiceModels);
     }
+
+
+    public void getAllCategories(){
+        CategoryRepository.Instance().getCategories()
+                .map((Function<BaseResponse<Categories>, List<GameChoiceModel>>) daresBaseResponse -> {
+                    List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
+                    for (Categories categories : daresBaseResponse.getResult()) {
+                        GameChoiceModel gameChoiceModel = new GameChoiceModel();
+                        gameChoiceModel.setId(categories.getCategoryID());
+                        gameChoiceModel.setTitle(categories.getCategoryName());
+                        gameChoiceModel.setBody(categories.getCategoryName());
+                        gameChoiceModel.setImageServer(Base64.decode(categories.getCategoryImage(), Base64.NO_WRAP) );
+                        gameChoiceModels.add(gameChoiceModel);
+                    }
+                    return gameChoiceModels;
+                })
+                .subscribe(new SingleObserver<List<GameChoiceModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<GameChoiceModel> gameChoiceModels) {
+
+                        gameChoices.postValue(gameChoiceModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        error.postValue(new Error(e.getMessage(),e.getCause()));
+                    }
+                });
+    }
+
+
 
     public LiveData<List<GameChoiceModel>> getGameChoices() {
         return gameChoices;

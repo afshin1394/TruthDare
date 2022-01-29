@@ -1,5 +1,6 @@
 package com.afshin.truthordare.Service;
 
+import com.afshin.truthordare.Service.Pojo.Categories;
 import com.afshin.truthordare.Service.Pojo.Dares;
 import com.afshin.truthordare.Service.Pojo.Questions;
 import com.afshin.truthordare.Service.Responses.BaseResponse;
@@ -18,6 +19,11 @@ public interface ApiService {
 
     @GET("api/Dare/GetAll")
     Single<Response<BaseResponse<Dares>>> getAllDares
+            (
+            );
+
+    @GET("api/Category/GetAll")
+    Single<Response<BaseResponse<Categories>>> getAllCategories
             (
             );
 }

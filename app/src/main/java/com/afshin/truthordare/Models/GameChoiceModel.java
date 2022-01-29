@@ -7,6 +7,7 @@ public class GameChoiceModel {
     private String title;
     private String body;
     private int image;
+    private byte[] imageServer;
 
     public int getId() {
         return id;
@@ -38,5 +39,13 @@ public class GameChoiceModel {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public byte[] getImageServer() {
+        return imageServer;
+    }
+
+    public void setImageServer(byte[] imageServer) {
+        this.imageServer = imageServer;
     }
 }

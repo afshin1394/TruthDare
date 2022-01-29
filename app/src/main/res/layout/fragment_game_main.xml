@@ -12,4 +12,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="-130dp"
+        android:layout_marginRight="-130dp"
+        android:rotation="225"
+        android:src="@drawable/mon_yellow" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:layout_marginLeft="-160dp"
+        android:src="@drawable/mon_pink"
+        />
+    <ImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:layout_marginLeft="@dimen/_60sdp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="-130dp"
+        android:src="@drawable/mon_green"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="@dimen/_100sdp"
+        android:layout_marginBottom="-130dp"
+        android:src="@drawable/mon_red"
+        />
+    <ImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:layout_marginRight="@dimen/_30sdp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="-130dp"
+        android:src="@drawable/mon_red"
+        />
+
+
+
 </FrameLayout>

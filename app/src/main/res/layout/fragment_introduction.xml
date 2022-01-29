@@ -2,12 +2,39 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mon_red"
+        android:rotation="225"
+        android:layout_marginTop="-110dp"
+        android:layout_marginRight="-110dp"
+        android:layout_gravity="end|top"
+        android:elevation="@dimen/_1sdp"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mon_green"
+        android:rotation="135"
+        android:layout_marginTop="-110dp"
+        android:layout_marginLeft="-110dp"
+        android:layout_gravity="start|top"
+        android:elevation="@dimen/_1sdp"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/specPurpleLight"
         >
+
+
+
+
+
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_animation"
         app:layout_constraintRight_toRightOf="parent"
@@ -38,5 +65,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+</FrameLayout>
 </layout>

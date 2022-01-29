@@ -5,13 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public abstract  class BaseResponse<T> {
+public  class BaseResponse<T> {
 
 
-    public BaseResponse() {
-    }
 
-    @SerializedName("results")
+
+    @SerializedName("result")
     @Expose
     private List<T> result;
 

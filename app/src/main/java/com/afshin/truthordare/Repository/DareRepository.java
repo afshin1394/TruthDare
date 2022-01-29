@@ -1,5 +1,7 @@
 package com.afshin.truthordare.Repository;
 
+import androidx.annotation.NonNull;
+
 import com.afshin.truthordare.Service.ApiClient;
 import com.afshin.truthordare.Service.ApiService;
 import com.afshin.truthordare.Service.Pojo.Dares;
@@ -7,6 +9,7 @@ import com.afshin.truthordare.Service.Reactive.RxHttpErrorHandler;
 import com.afshin.truthordare.Service.Responses.BaseResponse;
 
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
