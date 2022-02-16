@@ -79,7 +79,7 @@ public class GameChoiceViewModel extends AndroidViewModel {
 
     public void getDares() {
         DareRepository.Instance().getDares()
-                .map((Function<BaseResponse<Dares>, List<GameChoiceModel>>) daresBaseResponse -> {
+                .map(daresBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
                     for (Dares dares : daresBaseResponse.getResult()) {
                         GameChoiceModel gameChoiceModel = new GameChoiceModel();
@@ -130,7 +130,7 @@ public class GameChoiceViewModel extends AndroidViewModel {
 
     public void getAllCategories(){
         CategoryRepository.Instance().getCategories()
-                .map((Function<BaseResponse<Categories>, List<GameChoiceModel>>) daresBaseResponse -> {
+                .map(daresBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
                     for (Categories categories : daresBaseResponse.getResult()) {
                         GameChoiceModel gameChoiceModel = new GameChoiceModel();

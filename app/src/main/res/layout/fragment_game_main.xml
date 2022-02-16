@@ -5,22 +5,27 @@
     android:layout_height="match_parent"
     android:background="@color/specPurpleLight"
     tools:context=".MVVM.UI.Fragments.GameMainFragment">
-
-<com.afshin.truthordare.CustomViews.TruthDareView
-    android:id="@+id/CV_truthOrDare"
-    android:background="@color/specPurpleLight"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-
     <ImageView
+        android:id="@+id/chooseBottle"
+        android:elevation="@dimen/_4sdp"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:rotation="-20"
+        android:layout_gravity="bottom|start"
+        android:background="@drawable/choose_bottle"
+        android:layout_margin="@dimen/_10sdp"
+        android:src="@drawable/pepsi" />
+    <ImageView
+        android:elevation="@dimen/_2sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="-130dp"
-        android:layout_marginRight="-130dp"
+        android:layout_marginTop="-110dp"
+        android:layout_marginRight="-110dp"
         android:rotation="225"
         android:src="@drawable/mon_yellow" />
     <ImageView
+        android:elevation="@dimen/_2sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="90"
@@ -28,6 +33,7 @@
         android:src="@drawable/mon_pink"
         />
     <ImageView
+        android:elevation="@dimen/_2sdp"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="wrap_content"
         android:rotation="0"
@@ -38,6 +44,7 @@
         />
 
     <ImageView
+        android:elevation="@dimen/_2sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="0"
@@ -47,6 +54,7 @@
         android:src="@drawable/mon_red"
         />
     <ImageView
+        android:elevation="@dimen/_2sdp"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="wrap_content"
         android:rotation="0"
@@ -55,7 +63,21 @@
         android:layout_marginBottom="-130dp"
         android:src="@drawable/mon_red"
         />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="rtl"
+        >
+<com.afshin.truthordare.CustomViews.TruthDareView
+    android:id="@+id/CV_truthOrDare"
+    android:background="@color/specPurpleLight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 
 
+   <include layout="@layout/bottom_sheet"/>
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

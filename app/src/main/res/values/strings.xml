@@ -10,4 +10,5 @@
     <string name="WhatDoYouChoose">کدومو انتخاب می کنی؟</string>
     <string name="ask">بپرس</string>
     <string name="swipeAgain">دوباره بچرخون</string>
+    <string name="exitGame">برای اینکه از بازی بری بیرون یبار دیگه بزن!</string>
 </resources>

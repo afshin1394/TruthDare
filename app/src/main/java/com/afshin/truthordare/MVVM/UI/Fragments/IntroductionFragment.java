@@ -1,18 +1,34 @@
 package com.afshin.truthordare.MVVM.UI.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afshin.truthordare.BaseApplication;
+import com.afshin.truthordare.CustomViews.Toast;
+import com.afshin.truthordare.Interfaces.UIEvents;
+import com.afshin.truthordare.MVVM.UI.Activities.MainActivity;
+import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
+import com.afshin.truthordare.MVVM.ViewModel.IntroductionViewModel;
+import com.afshin.truthordare.Models.BottleModel;
 import com.afshin.truthordare.R;
+import com.afshin.truthordare.Utils.Enums.ToastDuration;
+import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.afshin.truthordare.Utils.NavigateUtil;
 import com.afshin.truthordare.databinding.FragmentIntroductionBinding;
+
+import java.util.List;
 
 
 /**
@@ -20,7 +36,7 @@ import com.afshin.truthordare.databinding.FragmentIntroductionBinding;
  * Use the {@link IntroductionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IntroductionFragment extends Fragment {
+public class IntroductionFragment extends Fragment implements UIEvents {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,18 +48,19 @@ public class IntroductionFragment extends Fragment {
     private String mParam2;
     private View view;
     private FragmentIntroductionBinding fragmentIntroductionBinding;
+    private IntroductionViewModel introductionViewModel;
 
 
+    private int backCounter = 0;
+    private Context context;
 
 
-
-
-
-
-
-
-
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+        ((MainActivity) getActivity()).setOnBackPressedListener(this);
+    }
 
     public IntroductionFragment() {
         // Required empty public constructor
@@ -82,28 +99,46 @@ public class IntroductionFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         fragmentIntroductionBinding = FragmentIntroductionBinding.inflate(getLayoutInflater(), container, false);
-//        fragmentIntroductionBinding.getRoot().
-//        fragmentIntroductionBinding.setOnClickListener(this::navigateToGameBuilder);
+        introductionViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(IntroductionViewModel.class);
+        introductionViewModel.getBottles(getActivity());
 
+        introductionViewModel.getBottlesLiveData().observe(getViewLifecycleOwner(), new Observer<List<BottleModel>>() {
+            @Override
+            public void onChanged(List<BottleModel> bottleModels) {
+                Log.i("bottleModelsGood", "onChanged: "+bottleModels);
+                navigateToGameBuilder(view);
+
+            }
+        });
         return fragmentIntroductionBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentIntroductionBinding.lottieAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateToGameBuilder(view);
 
-            }
-        });
     }
 
     public void navigateToGameBuilder(View view){
+         NavigateUtil.Navigate(getActivity(), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
+    }
 
-//                NavigateUtil navigateUtil=NavigateUtil.getInstance();
-                NavigateUtil.Navigate(getActivity(), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
-
+    @Override
+    public void onBackPressed() {
+        backCounter ++;
+        if (backCounter == 1)
+        {
+            Toast.showToast(context, ToastType.INFO, ToastDuration.SHORT,getString(R.string.exitGame));
+        }else{
+            getActivity().finish();
+        }
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                backCounter = 0;
+            }
+        }, 2000);
     }
 }

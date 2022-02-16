@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.afshin.truthordare.Adapters.Class.GameChoiceAdapter;
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.CustomViews.Toast;
+import com.afshin.truthordare.Interfaces.UIEvents;
 import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
 import com.afshin.truthordare.Models.GameChoiceModel;
 import com.afshin.truthordare.R;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameChoiceFragment extends DialogFragment {
+public class GameChoiceFragment extends DialogFragment implements UIEvents {
 
     private FragmentGameChoiceBinding fragmentIntroductionBinding;
     private Context context;
@@ -99,10 +100,9 @@ public class GameChoiceFragment extends DialogFragment {
         GameChoiceAdapter gameChoiceAdapter = new GameChoiceAdapter(context, gameChoiceModels, gameChoiceModel -> {
             switch (gameChoiceModel.getId()){
                 case 1001:
-                    gameChoiceViewModel.getAllCategories();
+//                    gameChoiceViewModel.getAllCategories();
                     gameChoiceViewModel.getQuestions();
                     break;
-
                 case 2001:
                     gameChoiceViewModel.getDares();
                     break;
@@ -118,4 +118,8 @@ public class GameChoiceFragment extends DialogFragment {
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

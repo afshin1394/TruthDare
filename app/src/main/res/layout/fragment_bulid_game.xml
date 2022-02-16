@@ -44,11 +44,6 @@
                 />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
-
             <androidx.recyclerview.widget.RecyclerView
                 app:layout_constraintTop_toBottomOf="@id/CST_chooseChallengerNumber"
                 android:id="@+id/RV_ChallengerNames"
@@ -58,9 +53,6 @@
                 android:background="@drawable/white_bordered"
                 app:layout_constraintHeight_percent="0.8"
                 />
-
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -88,6 +80,7 @@
         android:textSize="@dimen/_16sdp"
          />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

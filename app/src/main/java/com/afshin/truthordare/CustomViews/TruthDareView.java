@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.VelocityTrackerCompat;
@@ -72,6 +74,8 @@ public class TruthDareView extends View {
     //power for swiping the bottle
     private int power;
     private boolean bottleIsTurning;
+    private byte[] chosenBottle;
+    private boolean imageFilled = false;
 
 //    private static final long DELAY_MS = 2000;
 //    private static final long PERIOD_MS = 10000;
@@ -85,14 +89,12 @@ public class TruthDareView extends View {
     public TruthDareView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-
-
     }
 
-    public TruthDareView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-
-          super(context, attrs, defStyleAttr);
+    public TruthDareView(Context context, @Nullable AttributeSet attrs, int defStyleAttr,byte[] image) {
+        super(context, attrs, defStyleAttr);
         this.context = context;
+        this.chosenBottle = image;
     }
 
     public void setITruthDare(ITruthDare iTruthDare){
@@ -100,16 +102,17 @@ public class TruthDareView extends View {
     }
 
 
-    private void init()
+    private void init(byte[] image)
     {
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/b_bardiya.ttf");
         Typeface.create(tf, Typeface.NORMAL);
 
         Log.i("TruthDareView", "init: "+scale);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.winebottle, options);
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 1;
+        bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+
         Log.i("TruthDareView", "init: "+bmp);
         bottleMatrix = new Matrix();
         bottleBitmap = Bitmap.createScaledBitmap(bmp,(bmp.getWidth()/2 ),(bmp.getHeight()/2),true);
@@ -169,22 +172,31 @@ public class TruthDareView extends View {
         externalCirclePaint = new Paint();
         externalCirclePaint.setAntiAlias(true);
         externalCirclePaint.setColor(context.getColor(R.color.mauve));
+
+    }
+
+    public void changeBottleBitmap(byte[] image)
+    {
+
+        this.chosenBottle = image;
+        imageFilled = true;
+        postInvalidateDelayed(1);
+
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        if (!isInit)
-            init();
-
-        drawExternalCircle(canvas);
-        drawTransitionArc(canvas);
-        drawArcs(canvas);
-        drawNames(canvas, challengers);
-        drawCentralCircle(canvas);
-        drawBottle(canvas);
+        if (imageFilled) {
+            init(chosenBottle);
+            drawExternalCircle(canvas);
+            drawTransitionArc(canvas);
+            drawArcs(canvas);
+            drawNames(canvas, challengers);
+            drawCentralCircle(canvas);
+            drawBottle(canvas);
+        }
     }
     float startAngleTransit = 0f;
     float swipeAngleTransit = 0.1f;
@@ -284,6 +296,8 @@ public class TruthDareView extends View {
                         postInvalidateDelayed(1);
                         bottleAngle += 4;
                     } else {
+
+
                         bottleIsTurning = false;
                         identifyWhoAreGoingToPlay(bottleAngle);
                         isReleased = false;
@@ -483,7 +497,7 @@ public class TruthDareView extends View {
 
     }
 
-    public int generateRandomColor() {
+    private int generateRandomColor() {
         ArrayList<Integer> colors = new ArrayList<>();
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(230), rnd.nextInt(230), rnd.nextInt(230));
@@ -517,5 +531,6 @@ public class TruthDareView extends View {
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         return resizedBitmap;
     }
+
 
 }
