@@ -9,48 +9,32 @@
             type="com.afshin.truthordare.Challenger" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/LL_ChallengerItem"
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/IV_user"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="top"
-            android:layout_weight="1"
-            android:src="@drawable/ic_user_foreground" />
-
-
-        <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl"
+        android:theme="@style/TextInputLayoutTheme">
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/ETV_ChallengerName"
-                android:layout_width="0dp"
-                android:theme="@style/EditTextTheme"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/_6sdp"
-                android:layout_weight="1"
-                android:textColor="#fff"
-                android:hint="@string/challengerNameItemView"
-                android:maxLines="1" />
-        </LinearLayout>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/IV_user2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="top"
-            android:layout_weight="1"
-            android:src="@drawable/ic_user_foreground" />
-    </LinearLayout>
+            android:id="@+id/txtName"
+            android:drawablePadding="@dimen/_10sdp"
+            android:hint="@string/challengerNameItemView"
+            android:textColorHint="@color/strongWhite"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/strongWhite"
+            android:maxLines="1"
+            android:textColorHighlight="@color/mauve"
+            android:inputType="textPersonName"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </layout>

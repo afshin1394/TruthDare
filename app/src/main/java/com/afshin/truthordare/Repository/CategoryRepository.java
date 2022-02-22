@@ -15,6 +15,7 @@ public class CategoryRepository {
     private static CategoryRepository categoryRepository;
     private static ApiService apiService;
 
+
     public static CategoryRepository Instance(){
         if (apiService == null) {
             apiService = ApiClient.createService(ApiService.class);

@@ -3,6 +3,7 @@ package com.afshin.truthordare.Adapters.Class;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -38,6 +39,7 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderChallengers holder, int position) {
+        Log.i("ChallengerNameAdapter", "onBindViewHolder: "+position);
         holder.bind(position);
     }
 
@@ -59,9 +61,8 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
         public void bind(int position)
         {
-         binding.ETVChallengerName.setText(challengers.get(position).getName());
-         binding.IVUser.setImageBitmap(challengers.get(position).getImage());
-         binding.ETVChallengerName.addTextChangedListener(this);
+         binding.txtName.setText(challengers.get(position).getName());
+         binding.txtName.addTextChangedListener(this);
         }
 
 
@@ -81,5 +82,23 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
             challengers.get(getAdapterPosition()).setName(editable.toString());
 
         }
+
+
+
+    }
+    public void setChallengers(List<Challenger> challengers)
+    {
+        if (challengers.size() == 0)
+        {
+            Challenger challenger = new Challenger();
+            Challenger challenger1 = new Challenger();
+            Challenger challenger2 = new Challenger();
+            challengers.add(challenger);
+            challengers.add(challenger1);
+            challengers.add(challenger2);
+        }
+        this.challengers.clear();
+        this.challengers.addAll(challengers);
+        notifyDataSetChanged();
     }
 }

@@ -2,6 +2,7 @@ package com.afshin.truthordare.MVVM.UI.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -38,6 +40,8 @@ import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.afshin.truthordare.CustomViews.TruthDareView;
 import com.afshin.truthordare.R;
 import com.afshin.truthordare.Utils.NavigateUtil;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -56,7 +60,6 @@ public class GameMainFragment extends Fragment implements UIEvents {
     private Context context;
     private BottomSheetBehavior bottomSheetBehavior;
     private TruthDareView truthDareView;
-    private ImageView chooseBottle;
     private int backCounter = 0;
     private GameMainViewModel gameMainViewModel;
     private BottlesAdapter bottlesAdapter;
@@ -143,6 +146,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
     {
         recyclerView = view.findViewById(R.id.recycler_view);
         bottlesAdapter = new BottlesAdapter(context, bottleModels, bottleModel -> {
+
             truthDareView.changeBottleBitmap(bottleModel.getImage());
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
@@ -155,11 +159,22 @@ public class GameMainFragment extends Fragment implements UIEvents {
         LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linearSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        chooseBottle = view.findViewById(R.id.chooseBottle);
+        FloatingActionButton chooseBottle = view.findViewById(R.id.fabChooseBottle);
+        FloatingActionButton editChallengers = view.findViewById(R.id.fabEditPlayer);
+        FloatingActionMenu menu = view.findViewById(R.id.fabMenu);
 
+
+        editChallengers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                NavigateUtil.Navigate(getActivity(), R.id.action_gameMainFragment_to_bulidGameFragment, bundle, R.id.nav_host_fragment);
+            }
+        });
         chooseBottle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                menu.close(true);
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                      bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 else

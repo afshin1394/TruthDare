@@ -5,10 +5,13 @@
     <string name="numberOfChallengers">تعداد بازیکنان:</string>
     <string name="challengerNameItemView">نام بازیکن</string>
     <string name="startGame">شروع بازی</string>
+    <string name="editChallengers">بازیکن جدید اضافه کن</string>
     <string name="dare">جرئت</string>
     <string name="Truth">حقیقت</string>
     <string name="WhatDoYouChoose">کدومو انتخاب می کنی؟</string>
     <string name="ask">بپرس</string>
     <string name="swipeAgain">دوباره بچرخون</string>
     <string name="exitGame">برای اینکه از بازی بری بیرون یبار دیگه بزن!</string>
+    <string name="edit_player">بازیکناروعوض کن</string>
+    <string name="chooseBottle">بطری انتخاب کن</string>
 </resources>

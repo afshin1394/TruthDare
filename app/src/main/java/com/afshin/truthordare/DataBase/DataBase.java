@@ -9,14 +9,17 @@ import androidx.room.RoomDatabase;
 
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.DataBase.Dao.BottleDao;
+import com.afshin.truthordare.DataBase.Dao.ChallengerDao;
 import com.afshin.truthordare.DataBase.Entity.BottleEntity;
+import com.afshin.truthordare.DataBase.Entity.ChallengerEntity;
 import com.afshin.truthordare.Utils.Constants;
 
-@Database(entities = {BottleEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {BottleEntity.class, ChallengerEntity.class}, version = 2, exportSchema = false)
 public abstract class DataBase extends RoomDatabase {
     private static DataBase Instance;
 
     public abstract BottleDao bottleDao();
+    public abstract ChallengerDao challengerDao();
 
 
 
@@ -24,6 +27,7 @@ public abstract class DataBase extends RoomDatabase {
         if (Instance == null) {
 
             Instance = Room.databaseBuilder(context, DataBase.class, Constants.DATA_BASE)
+                    .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
         }

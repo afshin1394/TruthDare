@@ -3,18 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:background="@color/specPurpleLight"
     tools:context=".MVVM.UI.Fragments.GameMainFragment">
-    <ImageView
-        android:id="@+id/chooseBottle"
-        android:elevation="@dimen/_4sdp"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_60sdp"
-        android:rotation="-20"
-        android:layout_gravity="bottom|start"
-        android:background="@drawable/choose_bottle"
-        android:layout_margin="@dimen/_10sdp"
-        android:src="@drawable/pepsi" />
+
+<!--    <ImageView-->
+
+<!--        android:elevation="@dimen/_20sdp"-->
+<!--        android:id="@+id/BTN_editChallenger"-->
+<!--        android:layout_width="@dimen/_80sdp"-->
+<!--        android:layout_height="@dimen/_80sdp"-->
+<!--        android:layout_gravity="bottom|left"-->
+<!--        android:layout_marginTop="@dimen/_4sdp"-->
+<!--        android:padding="@dimen/_2sdp"-->
+<!--        android:background="@drawable/round_button_style"-->
+<!--        android:src="@drawable/add_player"-->
+
+<!--        />-->
+<!--    <ImageView-->
+<!--        android:id="@+id/chooseBottle"-->
+<!--        android:elevation="@dimen/_4sdp"-->
+<!--        android:layout_width="@dimen/_60sdp"-->
+<!--        android:layout_height="@dimen/_60sdp"-->
+<!--        android:rotation="-20"-->
+<!--        android:layout_gravity="bottom|start"-->
+<!--        android:background="@drawable/choose_bottle"-->
+<!--        android:layout_margin="@dimen/_10sdp"-->
+<!--        android:src="@drawable/pepsi" />-->
     <ImageView
         android:elevation="@dimen/_2sdp"
         android:layout_width="wrap_content"
@@ -80,4 +95,72 @@
    <include layout="@layout/bottom_sheet"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:elevation="@dimen/_20sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabMenu"
+        android:layout_gravity="bottom|left"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        fab:menu_fab_size="normal"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_colorNormal="@color/mediumPurple"
+        fab:menu_colorPressed="@color/KSUPurple"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_textColor="@color/strongWhite"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_labels_colorNormal="@color/KSUPurple"
+        fab:menu_labels_colorPressed="@color/mediumPurple"
+        fab:menu_labels_colorRipple="@color/mauve"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_position="right"
+        android:scaleType="centerInside"
+        fab:menu_openDirection="up"
+        fab:menu_backgroundColor="@android:color/transparent"
+ >
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:rotation="45"
+            android:id="@+id/fabChooseBottle"
+            android:src="@drawable/blue_bottle"
+            android:scaleType="centerInside"
+            fab:fab_size="normal"
+            fab:fab_colorNormal="@color/mediumPurple"
+            fab:fab_colorPressed="@color/KSUPurple"
+            fab:fab_label="@string/chooseBottle"
+ />
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:id="@+id/fabEditPlayer"
+            android:src="@drawable/add_player_fab"
+            android:scaleType="centerInside"
+            fab:fab_size="normal"
+            fab:fab_colorNormal="@color/mediumPurple"
+            fab:fab_colorPressed="@color/KSUPurple"
+            fab:fab_label="@string/edit_player"
+       />
+    </com.github.clans.fab.FloatingActionMenu>
 </FrameLayout>

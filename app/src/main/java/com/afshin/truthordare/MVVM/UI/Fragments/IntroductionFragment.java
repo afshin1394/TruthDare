@@ -106,7 +106,7 @@ public class IntroductionFragment extends Fragment implements UIEvents {
             @Override
             public void onChanged(List<BottleModel> bottleModels) {
                 Log.i("bottleModelsGood", "onChanged: "+bottleModels);
-                navigateToGameBuilder(view);
+                navigateToGameBuilder();
 
             }
         });
@@ -119,7 +119,7 @@ public class IntroductionFragment extends Fragment implements UIEvents {
 
     }
 
-    public void navigateToGameBuilder(View view){
+    public void navigateToGameBuilder(){
          NavigateUtil.Navigate(getActivity(), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
     }
 

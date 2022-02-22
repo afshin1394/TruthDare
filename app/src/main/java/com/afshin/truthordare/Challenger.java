@@ -68,10 +68,9 @@ public class Challenger  implements Parcelable {
     };
 
 
-
-
-
-
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public boolean isEmpty() {
         return name == null || name.isEmpty();

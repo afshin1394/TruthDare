@@ -16,9 +16,11 @@
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_checked.xml" value="0.2734375" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_error.xml" value="0.2734375" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_exclamation.xml" value="0.2734375" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_menu.xml" value="0.14375" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_simplebottle.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/ic_simplebottle_background.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/rouded_drawable.xml" value="0.20277777777777778" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/round_button_style.xml" value="0.1648148148148148" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/rounded_drawable.xml" value="0.16822916666666668" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/selected_item_dropdown_bg.xml" value="0.2361111111111111" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/spinner.xml" value="0.1375" />
@@ -35,7 +37,7 @@
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_bulid_game.xml" value="0.3182374541003672" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_dare.xml" value="0.25729166666666664" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_choice.xml" value="0.1" />
-        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_main.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_game_main.xml" value="0.14" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_introduction.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_truth.xml" value="0.25729166666666664" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/game_choice_item.xml" value="0.25" />

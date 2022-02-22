@@ -31,5 +31,12 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="TextInputLayoutTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/strongWhite</item>
+        <item name="colorControlActivated">@color/strongWhite</item>
+        <item name="colorControlHighlight">@color/strongWhite</item>
+    </style>
+
+
 
 </resources>

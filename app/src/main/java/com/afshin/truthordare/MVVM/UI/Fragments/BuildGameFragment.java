@@ -113,11 +113,40 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializeRecyclerView();
-        initializeSpinner();
+        initializeRecyclerView(challengers);
         fragmentBulidGameBinding.BTNStartGame.setOnClickListener(view1 -> {
-            startGameClick();
+            startGameClick(challengers);
         });
+        buildGameViewModel.getAllChallengers(context);
+
+        buildGameViewModel.getAllChallengersLiveData().observe(getViewLifecycleOwner(), new Observer<List<Challenger>>() {
+            @Override
+            public void onChanged(List<Challenger> challengers) {
+                BuildGameFragment.this.challengers = challengers;
+                Log.i("setttt", "onChanged: "+challengers.size());
+
+                if (challengers.size() == 0)
+                    initializeSpinner(0);
+                else
+                    initializeSpinner(challengers.size() - 3);
+
+                challengerNameAdapter.setChallengers(BuildGameFragment.this.challengers);
+
+            }
+        });
+
+        buildGameViewModel.getAllModifiedChallengersLiveData().observe(getViewLifecycleOwner(), new Observer<List<Challenger>>() {
+            @Override
+            public void onChanged(List<Challenger> challengers) {
+                Log.i("settttModified", "onChanged: "+challengers.size());
+
+                challengerNameAdapter.setChallengers(BuildGameFragment.this.challengers);
+
+            }
+        });
+
+
+
 //        buildGameViewModel.getBottles(context);
 //        buildGameViewModel.getBottlesLiveData().observe(getViewLifecycleOwner(), new Observer<BottleModel>() {
 //            @Override
@@ -130,42 +159,52 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     }
 
 
-    private void startGameClick() {
-        ArrayList<Challenger> challengersList = new ArrayList<>();
+    private void startGameClick(List<Challenger> challengers) {
+
 
         if (challengers.size() < challengerNameAdapter.getItemCount()) {
-            Toast.showToast(context,ToastType.INFO,ToastDuration.SHORT,"نام همه بازیکنان را وارد کنید");
+            Toast.showToast(context, ToastType.INFO, ToastDuration.SHORT, "نام همه بازیکنان را وارد کنید");
 
         } else {
             for (int i = 0; i < challengers.size(); i++) {
                 if (challengers.get(i).getName() == null) {
-                    Toast.showToast(context,ToastType.INFO,ToastDuration.SHORT,"نام همه بازیکنان را وارد کنید");
+                    Toast.showToast(context, ToastType.INFO, ToastDuration.SHORT, "نام همه بازیکنان را وارد کنید");
                     break;
                 }
-                Challenger challenger = new Challenger(challengers.get(i).getName(), null, CustomViewUtils.generateRandomColor());
-                challengersList.add(challenger);
+                challengers.get(i).setColor(CustomViewUtils.generateRandomColor());
                 if (i == challengers.size() - 1)
-                    startGame(challengersList);
+                    startGame(challengers);
             }
         }
     }
 
-    private void startGame(ArrayList<Challenger> challengersList) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("challengers", challengersList);
-        NavigateUtil.Navigate(getActivity(), R.id.action_bulidGameFragment_to_gameMainFragment, bundle, R.id.nav_host_fragment);
+    private void startGame(List<Challenger> challengersList) {
+        buildGameViewModel.refreshChallengers(context, challengersList);
+        buildGameViewModel.refreshChallengersLiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean refreshed) {
+                if (refreshed) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("challengers", new ArrayList<>(challengersList));
+                    NavigateUtil.Navigate(getActivity(), R.id.action_bulidGameFragment_to_gameMainFragment, bundle, R.id.nav_host_fragment);
+                }
+
+            }
+        });
+
     }
 
 
-    private void initializeSpinner() {
+    private void initializeSpinner(int selection) {
         String[] items = new String[]{"3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         ArrayAdapter<String> adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, items);
         adapter.setDropDownViewResource(R.layout.drop_down_item);
         fragmentBulidGameBinding.SPNumberOfChallengers.setAdapter(adapter);
         fragmentBulidGameBinding.SPNumberOfChallengers.setOnItemSelectedListener(this);
+        fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(selection);
     }
 
-    private void initializeRecyclerView() {
+    private void initializeRecyclerView(List<Challenger> challengers) {
         challengerNameAdapter = new ChallengerNameAdapter(challengers);
         fragmentBulidGameBinding.RVChallengerNames.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         fragmentBulidGameBinding.RVChallengerNames.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -177,26 +216,11 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        ((TextView) fragmentBulidGameBinding.SPChooseNumberOfChallengers.getSelectedView()).setTextColor(getResources().getColor(R.color.white));
-//        ((TextView) fragmentBulidGameBinding.SPChooseNumberOfChallengers.getSelectedView()).setTextColor(getResources().getColor(R.color.white));
-//        ((TextView) fragmentBulidGameBinding.SPChooseNumberOfChallengers.getSelectedView()).setOutlineSpotShadowColor(getResources().getColor(R.color.white));
-
 
         fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(i);
-        int value = Integer.parseInt(fragmentBulidGameBinding.SPNumberOfChallengers.getItemAtPosition(i).toString());
-        ArrayList<Challenger> challengerArrayList = new ArrayList<>();
-        for (int index = 0; index < value; index++) {
-            Challenger challenger = new Challenger();
-            challengerArrayList.add(challenger);
-        }
-        challengers.clear();
-        challengers.addAll(challengerArrayList);
-
-
-        challengerNameAdapter.notifyDataSetChanged();
-        Log.i("itemCount", "onItemSelected: " + challengerNameAdapter.getItemCount() + "i:" + value);
-
-
+        int selectedValue = Integer.parseInt(fragmentBulidGameBinding.SPNumberOfChallengers.getItemAtPosition(i).toString());
+        Log.i("selectedValuee", "onItemSelected: "+selectedValue);
+        buildGameViewModel.checkItemSelection(selectedValue,challengers);
     }
 
     @Override
@@ -214,11 +238,9 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             getActivity().finish();
         }
 
-        new Handler().postDelayed(new Runnable()
-        {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 backCounter = 0;
             }
         }, 2000);

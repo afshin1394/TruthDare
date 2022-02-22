@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_gameMainFragment_to_gameChoiceFragment"
             app:destination="@id/gameChoiceFragment" />
+        <action
+            android:id="@+id/action_gameMainFragment_to_bulidGameFragment"
+            app:destination="@id/bulidGameFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameChoiceFragment"
