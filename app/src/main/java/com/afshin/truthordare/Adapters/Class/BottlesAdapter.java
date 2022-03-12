@@ -13,7 +13,6 @@ import com.afshin.truthordare.Adapters.Interface.BottleEvents;
 import com.afshin.truthordare.Models.BottleModel;
 import com.afshin.truthordare.R;
 import com.afshin.truthordare.databinding.BottlesItemViewBinding;
-import com.afshin.truthordare.databinding.ChallengerItemviewBinding;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 

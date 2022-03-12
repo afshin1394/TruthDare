@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afshin.truthordare.Challenger;
+import com.afshin.truthordare.Interfaces.ChallengerNameEvents;
 import com.afshin.truthordare.R;
-import com.afshin.truthordare.databinding.ChallengerItemviewBinding;
+import com.afshin.truthordare.databinding.BuildGameItemviewBinding;
 
 import java.util.List;
 
@@ -21,11 +23,14 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
 
     List<Challenger> challengers;
+    boolean hasDeleteChoice = false;
+    private ChallengerNameEvents challengerNameEvents;
 
 
 
-    public ChallengerNameAdapter(List<Challenger> challengers)
+    public ChallengerNameAdapter(List<Challenger> challengers,ChallengerNameEvents challengerNameEvents)
     {
+        this.challengerNameEvents = challengerNameEvents;
         this.challengers = challengers;
     }
 
@@ -33,7 +38,7 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
     @Override
     public ViewHolderChallengers onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ChallengerItemviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.challenger_itemview, parent, false);
+        BuildGameItemviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.build_game_itemview, parent, false);
         return new ViewHolderChallengers(binding);
     }
 
@@ -48,19 +53,26 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
         return challengers.size();
     }
 
-
+    public void setDeleteChoices(boolean hasDeleteChoice) {
+        this.hasDeleteChoice = hasDeleteChoice;
+        notifyDataSetChanged();
+    }
 
 
     class ViewHolderChallengers extends RecyclerView.ViewHolder implements TextWatcher {
-        private  ChallengerItemviewBinding binding;
+        private  BuildGameItemviewBinding binding;
 
-        public ViewHolderChallengers(ChallengerItemviewBinding binding) {
+        public ViewHolderChallengers(BuildGameItemviewBinding binding) {
             super(binding.getRoot());
-            this.binding=binding;
+            this.binding = binding;
+            binding.deleteChoice.setOnClickListener(view -> {
+               challengerNameEvents.onDelete(getAdapterPosition());
+            });
         }
 
         public void bind(int position)
         {
+         binding.deleteChoice.setVisibility(hasDeleteChoice?View.VISIBLE:View.GONE);
          binding.txtName.setText(challengers.get(position).getName());
          binding.txtName.addTextChangedListener(this);
         }

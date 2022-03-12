@@ -2,9 +2,14 @@ package com.afshin.truthordare.Service;
 
 import android.util.Log;
 
+import com.afshin.truthordare.BaseApplication;
+import com.afshin.truthordare.CustomViews.Toast;
+import com.afshin.truthordare.Utils.Enums.ToastDuration;
+import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -55,10 +60,10 @@ public  class ApiClient {
             Request request = chain.request();
             long t1 = System.nanoTime();
             String requestLog = String.format("Sending request %s %s on %s%n%s", request.method(), request.url(), chain.connection(), request.headers());
-
+//            Toast.showToast(BaseApplication.getContext(), ToastType.INFO, ToastDuration.LONG,String.valueOf(request.url().url().toString().length()));
 
             Log.i("HTTP_Request", "request" + "\n" + requestLog + "  chain time out = " + chain.readTimeoutMillis() + " connect " + chain.connectTimeoutMillis() + " write = " + chain
-                    .writeTimeoutMillis());
+                    .writeTimeoutMillis() +"url length: "+request.url().url().toString().getBytes(StandardCharsets.UTF_8).length);
             Response response = chain.proceed(request);
             long t2 = System.nanoTime();
 

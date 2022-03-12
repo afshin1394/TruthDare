@@ -144,7 +144,7 @@
             android:layout_height="@dimen/_20sdp"
             android:rotation="45"
             android:id="@+id/fabChooseBottle"
-            android:src="@drawable/blue_bottle"
+            android:src="@drawable/ic_coca_cola_fab"
             android:scaleType="centerInside"
             fab:fab_size="normal"
             fab:fab_colorNormal="@color/mediumPurple"
