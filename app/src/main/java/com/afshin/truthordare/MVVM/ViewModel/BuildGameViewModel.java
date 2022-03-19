@@ -31,7 +31,6 @@ import io.reactivex.disposables.Disposable;
 public class BuildGameViewModel extends AndroidViewModel {
     MutableLiveData<Boolean> challengersRefresh = new MutableLiveData<>();
     MutableLiveData<List<Challenger>> challengers = new MutableLiveData<>();
-    MutableLiveData<List<Challenger>> modifiedChallengers = new MutableLiveData<>();
     MutableLiveData<Boolean> deleteChoice = new MutableLiveData<>();
     MutableLiveData<BaseInfo> baseInfo = new MutableLiveData<>();
 
@@ -123,7 +122,6 @@ public class BuildGameViewModel extends AndroidViewModel {
         challengers.addAll(preChallengers);
         Log.i("checkItemSelection", "getPreviousChallengers: " + challengers.size() + "selected value :" + selectedValue);
         if (selectedValue >= challengers.size()) {
-
             challengerCreateCount = selectedValue - challengers.size();
 
             Log.i("checkItemSelection", "challengerCreateCount: " + challengerCreateCount);
@@ -144,7 +142,7 @@ public class BuildGameViewModel extends AndroidViewModel {
 
         Log.i("checkItemSelection", "challengers.size(): " + challengers.size());
         Log.i("checkItemSelection", "challengers" + challengers);
-        this.modifiedChallengers.postValue(challengers);
+        this.challengers.postValue(challengers);
     }
 
     public void deleteChallenger(int selectedValue, int position) {
@@ -153,7 +151,7 @@ public class BuildGameViewModel extends AndroidViewModel {
         if (this.challengers.getValue().get(position) != null)
             this.challengers.getValue().remove(position);
 
-        this.modifiedChallengers.postValue(this.challengers.getValue());
+        this.challengers.postValue(this.challengers.getValue());
         Log.i("deleteChallenger", "deleteChallenger: " + this.challengers.getValue().size() + "selectedValue"+selectedValue);
         if (this.challengers.getValue().size() == selectedValue)
             this.deleteChoice.postValue(false);
@@ -201,9 +199,7 @@ public class BuildGameViewModel extends AndroidViewModel {
         return challengers;
     }
 
-    public LiveData<List<Challenger>> getAllModifiedChallengersLiveData() {
-        return modifiedChallengers;
-    }
+
 
     public LiveData<Boolean> getDeleteChoiceLiveData() {
         return deleteChoice;
