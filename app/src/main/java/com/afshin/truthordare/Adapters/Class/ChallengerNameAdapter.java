@@ -28,10 +28,11 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
 
 
 
-    public ChallengerNameAdapter(List<Challenger> challengers,ChallengerNameEvents challengerNameEvents)
+    public ChallengerNameAdapter(List<Challenger> challengers,boolean hasDeleteChoice,ChallengerNameEvents challengerNameEvents)
     {
         this.challengerNameEvents = challengerNameEvents;
         this.challengers = challengers;
+        this.hasDeleteChoice = hasDeleteChoice;
     }
 
     @NonNull
@@ -53,10 +54,6 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
         return challengers.size();
     }
 
-    public void setDeleteChoices(boolean hasDeleteChoice) {
-        this.hasDeleteChoice = hasDeleteChoice;
-        notifyDataSetChanged();
-    }
 
 
     class ViewHolderChallengers extends RecyclerView.ViewHolder implements TextWatcher {
@@ -100,6 +97,8 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
     }
     public void setChallengers(List<Challenger> challengers)
     {
+        Log.i("setChallengers", "size: "+challengers.size());
+        Log.i("setChallengers", "content: "+challengers);
         if (challengers.size() == 0)
         {
             Challenger challenger = new Challenger();

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+
         mainActivityViewModel.deleteAllChallengers(MainActivity.this);
         mainActivityViewModel.deleteAllChallengersViewModel().observe(MainActivity.this, new Observer<Boolean>() {
             @Override

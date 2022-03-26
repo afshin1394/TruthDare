@@ -1,6 +1,7 @@
 package com.afshin.truthordare.Repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -43,11 +44,11 @@ public class ChallengerRepository {
         Callable<List<ChallengerEntity>> getAllCallable = () -> challengerDao.getAll();
         return  Single.fromCallable(getAllCallable)
                 .map(challengerEntities -> {
+                    Log.i("challengerEntity", "getAll: "+challengerEntities);
                     List<Challenger> challengers = new ArrayList<>();
                     for (ChallengerEntity challengerEntity : challengerEntities) {
                         Challenger challenger = new Challenger();
                         challenger.setName(challengerEntity.getName());
-//                        challenger.setImage(challengerEntity.getImage());
                         challenger.setEndAngle(challengerEntity.getEndAngle());
                         challenger.setStartAngle(challengerEntity.getStartAngle());
                         challengers.add(challenger);

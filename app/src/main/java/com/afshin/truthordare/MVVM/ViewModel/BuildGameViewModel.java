@@ -99,8 +99,8 @@ public class BuildGameViewModel extends AndroidViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<Challenger> challengersModels) {
-                        Log.i("challengerssss", "onSuccess: " + challengersModels.size());
-                        challengers.postValue(challengersModels);
+                        Log.i("BuildGameFragmentx", "onSuccess: "+challengersModels);
+                        challengers.setValue(challengersModels);
                     }
 
                     @Override
@@ -115,7 +115,7 @@ public class BuildGameViewModel extends AndroidViewModel {
     public void checkItemSelection(int selectedValue, List<Challenger> challengers) {
 
         int challengerCreateCount = 0;
-        Log.i("checkItemSelection", "getPreviousChallengers: " + challengers.size() + "selected value:" + selectedValue);
+        Log.i("checkItemSelection", "init: " + challengers.size() + "selected value:" + selectedValue);
 
         List<Challenger> preChallengers = getPreviousChallengers(challengers);
         challengers.clear();
@@ -123,20 +123,23 @@ public class BuildGameViewModel extends AndroidViewModel {
         Log.i("checkItemSelection", "getPreviousChallengers: " + challengers.size() + "selected value :" + selectedValue);
         if (selectedValue >= challengers.size()) {
             challengerCreateCount = selectedValue - challengers.size();
-
-            Log.i("checkItemSelection", "challengerCreateCount: " + challengerCreateCount);
+            Log.i("checkItemSelection", "selectedValue >= challengers.size() " + challengerCreateCount);
             for (int i = 0; i < challengerCreateCount; i++) {
                 Challenger challenger = new Challenger();
                 challengers.add(challenger);
             }
             deleteChoice.postValue(false);
         } else {
-            Log.i("checkItemSelection", "postValue: " + challengerCreateCount);
+            Log.i("checkItemSelection", "selectedValue < challengers.size(): " + challengerCreateCount);
             challengerCreateCount = challengers.size() - selectedValue;
-            if (challengerCreateCount < 0)
+            if (challengerCreateCount < 0) {
+                Log.i("checkItemSelection", "deleteChoice: false");
                 deleteChoice.postValue(false);
-            else
+            }
+            else {
+                Log.i("checkItemSelection", "deleteChoice: true");
                 deleteChoice.postValue(true);
+            }
 
         }
 
@@ -147,14 +150,19 @@ public class BuildGameViewModel extends AndroidViewModel {
 
     public void deleteChallenger(int selectedValue, int position) {
 
-
-        if (this.challengers.getValue().get(position) != null)
+        Log.i("deleteChallenger", "deleteChallenger: "+this.challengers.getValue().get(position));
+        if (this.challengers.getValue().get(position) != null) {
             this.challengers.getValue().remove(position);
+        }
+        this.challengers.setValue(this.challengers.getValue());
 
-        this.challengers.postValue(this.challengers.getValue());
-        Log.i("deleteChallenger", "deleteChallenger: " + this.challengers.getValue().size() + "selectedValue"+selectedValue);
+        Log.i("deleteChallenger", "deleteChallenger: " + this.challengers.getValue() + "selectedValue"+selectedValue);
+
         if (this.challengers.getValue().size() == selectedValue)
-            this.deleteChoice.postValue(false);
+            this.deleteChoice.setValue(false);
+
+
+
 
     }
 

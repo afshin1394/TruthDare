@@ -68,6 +68,8 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     private int backCounter = 0;
     private BuildGameViewModel buildGameViewModel;
     private int selectedValue;
+    private boolean initSpinner;
+    private boolean hasDeleteChoice;
 
 
     @Override
@@ -87,6 +89,8 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         challengers = new ArrayList<>();
+        initSpinner = true;
+        hasDeleteChoice = false;
     }
 
     @Override
@@ -101,7 +105,12 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializeRecyclerView(challengers);
+
+        initializeSpinner();
+        fragmentBulidGameBinding.BTNStartGame.setOnClickListener(view1 -> {
+            int viewItemCount = challengerNameAdapter.getItemCount();
+            buildGameViewModel.startGame(context,challengers,viewItemCount);
+        });
 
         buildGameViewModel.getAllChallengers(context);
 
@@ -112,21 +121,12 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             }
         });
 
-
-
-
-        fragmentBulidGameBinding.BTNStartGame.setOnClickListener(view1 -> {
-            int viewItemCount = challengerNameAdapter.getItemCount();
-            buildGameViewModel.startGame(context,challengers,viewItemCount);
-        });
-
-
         buildGameViewModel.getDeleteChoiceLiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean delete) {
-
-                Log.i("getDeleteChoiceLiveData", "onChanged: "+delete);
-                challengerNameAdapter.setDeleteChoices(delete);
+                Log.i("checkItemSelection", "onChanged: "+delete);
+                hasDeleteChoice = delete;
+                initializeRecyclerView(challengers,delete);
             }
         });
 
@@ -134,12 +134,18 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             @Override
             public void onChanged(List<Challenger> challengers) {
                 BuildGameFragment.this.challengers = challengers;
-                selectedValue = challengers.size();
-                initializeSpinner();
-                Log.i("getAllChallengersLiveData", "getAllChallengersLiveData: "+challengers.toString());
-                Log.i("getAllChallengersLiveData", "selectedValue: "+selectedValue);
+//                selectedValue = challengers.size();
 
-                challengerNameAdapter.setChallengers(BuildGameFragment.this.challengers);
+                Log.i("BuildGameFragmentx", "getAllChallengersLiveData: "+challengers.toString());
+                Log.i("getAllChallengersLiveData", "selectedValue: "+selectedValue);
+                initializeRecyclerView(challengers,hasDeleteChoice);
+                if (initSpinner)
+                {
+                    Log.i("initializeSpinner", "initializeSpinner: "+selectedValue);
+                    fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(selectedValue-3);
+                    initSpinner = false;
+                }
+
             }
         });
 
@@ -170,11 +176,11 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
         adapter.setDropDownViewResource(R.layout.drop_down_item);
         fragmentBulidGameBinding.SPNumberOfChallengers.setAdapter(adapter);
         fragmentBulidGameBinding.SPNumberOfChallengers.setOnItemSelectedListener(this);
-        fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(selectedValue-3);
     }
 
-    private void initializeRecyclerView(List<Challenger> challengers) {
-        challengerNameAdapter = new ChallengerNameAdapter(challengers, new ChallengerNameEvents() {
+    private void initializeRecyclerView(List<Challenger> challengers,boolean hasDeleteChoice) {
+        Log.i("initializeRecyclerView", "size:"+challengers.size());
+        challengerNameAdapter = new ChallengerNameAdapter(challengers,hasDeleteChoice, new ChallengerNameEvents() {
             @Override
             public void onDelete(int position) {
                 buildGameViewModel.deleteChallenger(selectedValue,position);
@@ -190,17 +196,13 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
         Log.i("onItemSelected", "int value : "+i + "long Value"+ l);
         int selectedValue = Integer.parseInt(fragmentBulidGameBinding.SPNumberOfChallengers.getItemAtPosition(i).toString());
         Log.i("onItemSelected", "selected Value: "+selectedValue);
         Log.i("onItemSelected", "challengers.size: "+challengers.size() + "selected Value"+ selectedValue);
-        Log.i("onItemSelected", "selected value: "+Integer.parseInt(fragmentBulidGameBinding.SPNumberOfChallengers.getItemAtPosition(i).toString()));
+        Log.i("onItemSelected", "selected value: "+selectedValue);
         this.selectedValue = selectedValue;
         buildGameViewModel.checkItemSelection(selectedValue,challengers);
-//        fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(selectedValue-3);
-
-
     }
 
     @Override
