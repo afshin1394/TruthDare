@@ -1,6 +1,7 @@
 package com.afshin.truthordare.Repository;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
@@ -48,7 +50,9 @@ public class ChallengerRepository {
                     List<Challenger> challengers = new ArrayList<>();
                     for (ChallengerEntity challengerEntity : challengerEntities) {
                         Challenger challenger = new Challenger();
+                        challenger.setId(challengerEntity.getId());
                         challenger.setName(challengerEntity.getName());
+                        challenger.setImage(Uri.parse(challengerEntity.getImage()));
                         challenger.setEndAngle(challengerEntity.getEndAngle());
                         challenger.setStartAngle(challengerEntity.getStartAngle());
                         challengers.add(challenger);
@@ -65,7 +69,7 @@ public class ChallengerRepository {
                     for (Challenger challenger : challengers1) {
                         ChallengerEntity challengerEntity = new ChallengerEntity();
                         challengerEntity.setColor(challenger.getColor());
-//                        challengerEntity.setImage(challenger.getImage());
+                        challengerEntity.setImage(challenger.getImage().toString());
                         challengerEntity.setName(challenger.getName());
                         challengerEntity.setStartAngle(challenger.getStartAngle());
                         challengerEntity.setEndAngle(challenger.getEndAngle());
@@ -81,5 +85,9 @@ public class ChallengerRepository {
         Callable<Integer> deleteAllCallable  = () -> challengerDao.deleteAll();
         return Single.fromCallable(deleteAllCallable)
                 .subscribeOn(Schedulers.io());
+    }
+
+    public void updateImage(String image,int id) {
+         challengerDao.updateImage(image,id);
     }
 }

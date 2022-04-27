@@ -1,6 +1,7 @@
 package com.afshin.truthordare;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -11,25 +12,35 @@ public class Challenger  implements Parcelable {
     public Challenger() {
     }
 
-    public Challenger(String name, Bitmap image, int color) {
+    public Challenger(String name, Uri image, int color) {
         this.name = name;
         this.color = color;
         this.image =image;
     }
-
+    int id;
     String name;
-    Bitmap image;
+    Uri image;
     int color = 0;
     double startAngle;
     double endAngle;
 
+    Bitmap imageCustom;
+
     protected Challenger(Parcel in) {
+        id  = in.readInt();
         name = in.readString();
         color = in.readInt();
         startAngle = in.readDouble();
         endAngle = in.readDouble();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -47,11 +58,11 @@ public class Challenger  implements Parcelable {
     }
 
 
-    public Bitmap getImage() {
+    public Uri getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 
@@ -101,6 +112,7 @@ public class Challenger  implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeInt(color);
         parcel.writeDouble(startAngle);
@@ -111,12 +123,20 @@ public class Challenger  implements Parcelable {
         Log.i(TAG, "onTextChanged: " + s);
     }
 
+    public Bitmap getImageCustom() {
+        return imageCustom;
+    }
+
+    public void setImageCustom(Bitmap imageCustom) {
+        this.imageCustom = imageCustom;
+    }
 
     // Function to check if value is empty
 
     @Override
     public String toString() {
         return "Challenger{" +
+                "id='" + id + '\'' +
                 "name='" + name + '\'' +
                 ", color=" + color +
                 ", startAngle=" + startAngle +

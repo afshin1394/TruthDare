@@ -12,7 +12,9 @@ public class ChallengerEntity {
     private int id;
 
    private String name;
-//   private Bitmap image;
+
+   private String image;
+
    private int color = 0;
    private double startAngle;
    private double endAngle;
@@ -56,5 +58,13 @@ public class ChallengerEntity {
 
     public void setEndAngle(double endAngle) {
         this.endAngle = endAngle;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

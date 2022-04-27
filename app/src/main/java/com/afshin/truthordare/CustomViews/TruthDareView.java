@@ -9,10 +9,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -27,6 +32,7 @@ import androidx.core.view.VelocityTrackerCompat;
 import com.afshin.truthordare.Challenger;
 import com.afshin.truthordare.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +47,7 @@ public class TruthDareView extends View {
     private Paint transitionArcPaint;
     private Paint namePaint;
     private Paint centralCirclePaint;
+    private Paint enlargingCirclePaint;
     private Paint externalCirclePaint;
     private RectF arcRect;
     private RectF transitionArcRect;
@@ -76,6 +83,7 @@ public class TruthDareView extends View {
     private boolean bottleIsTurning;
     private byte[] chosenBottle;
     private boolean imageFilled = false;
+    private boolean transitionArcFinished = false;
 
 //    private static final long DELAY_MS = 2000;
 //    private static final long PERIOD_MS = 10000;
@@ -104,8 +112,20 @@ public class TruthDareView extends View {
 
     private void init(byte[] image)
     {
+
+
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/b_bardiya.ttf");
         Typeface.create(tf, Typeface.NORMAL);
+        for (Challenger challenger : challengers) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), challenger.getImage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Bitmap resizedBmp = getCroppedScaledBitmap(bitmap,440,440);
+            challenger.setImageCustom(resizedBmp);
+        }
 
         Log.i("TruthDareView", "init: "+scale);
 
@@ -173,15 +193,18 @@ public class TruthDareView extends View {
         externalCirclePaint.setAntiAlias(true);
         externalCirclePaint.setColor(context.getColor(R.color.mauve));
 
+
+        enlargingCirclePaint = new Paint();
+        enlargingCirclePaint.setAntiAlias(true);
+        enlargingCirclePaint.setColor(context.getColor(R.color.flame));
+
     }
 
     public void changeBottleBitmap(byte[] image)
     {
-
         this.chosenBottle = image;
         imageFilled = true;
         postInvalidateDelayed(1);
-
     }
 
 
@@ -194,8 +217,9 @@ public class TruthDareView extends View {
             drawTransitionArc(canvas);
             drawArcs(canvas);
             drawNames(canvas, challengers);
+            drawImages(canvas,challengers);
             drawCentralCircle(canvas);
-            drawBottle(canvas);
+//            drawEnlargingCircle(canvas);
         }
     }
     float startAngleTransit = 0f;
@@ -246,10 +270,36 @@ public class TruthDareView extends View {
             namePaint.getTextBounds(challenger.getName(), 0, 0, textRect);
             Log.i("drawNames", "drawNames: " + ((float) angle));
             canvas.save();
-            canvas.rotate((float) (angle), x, y);
+            canvas.rotate((float) (angle) + 90f, x, y);
             canvas.drawText(challenger.getName(), x - 6 * (challenger.getName().length()), y, namePaint);
             canvas.restore();
         }
+
+    }
+
+    private void drawImages(Canvas canvas, List<Challenger> challengers)  {
+    try {
+
+        for (Challenger challenger : challengers) {
+            double angle = (challenger.getStartAngle() + challenger.getEndAngle()) / 2;
+            Log.i("drawImages", "drawImages: " + angle);
+            int x = (int) (centerX + Math.cos(Math.toRadians(angle)) * (radiusBigCircle * 0.65));
+            int y = (int) (centerY + Math.sin(Math.toRadians(angle)) * (radiusBigCircle * 0.65));
+            Log.i("drawImages", "cos: " + Math.cos(Math.toRadians(angle)) + " x,y:" + x + "," + y);
+            textRect = new Rect();
+            namePaint.getTextBounds(challenger.getName(), 0, 0, textRect);
+            Log.i("drawImages", "drawImages: " + ((float) angle));
+            canvas.save();
+//            canvas.rotate((float) (angle), x, y);
+
+
+            canvas.drawBitmap(challenger.getImageCustom(), x - 60 , y - 50, namePaint);
+//            canvas.drawText(challenger.getName(), x - 6 * (challenger.getName().length()), y, namePaint);
+            canvas.restore();
+        }
+    }catch(Exception e){
+        Log.i(TAG, "drawImages: "+e.getMessage());
+    }
 
     }
 
@@ -358,12 +408,21 @@ public class TruthDareView extends View {
 
 
     private void drawCentralCircle(Canvas canvas) {
-
         canvas.drawCircle(((float) centerX), ((float) centerY), ((float) (radiusCentralCircle)), centralCirclePaint);
     }
     private void drawExternalCircle(Canvas canvas) {
         canvas.drawCircle(((float) centerX), ((float) centerY), ((float) (radiusExternalCircle)), externalCirclePaint);
+    }
+    private double radiusEnlargingCircle = radiusCentralCircle/30;
+    private void drawEnlargingCircle(Canvas canvas) {
+        if (transitionArcFinished) {
+            if (radiusEnlargingCircle < radiusCentralCircle) {
 
+                radiusEnlargingCircle += 1d;
+                canvas.drawCircle(((float) centerX), ((float) centerY), ((float) (radiusEnlargingCircle)), enlargingCirclePaint);
+                postInvalidateDelayed(1);
+            }
+        }
     }
 
 
@@ -372,8 +431,12 @@ public class TruthDareView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     }
+    boolean isTouch = false;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+
+        isTouch = true;
         if (bottleIsTurning)
             return false;
         Log.i("onTouchEvent", "onTouchEvent: " + event.getAction());
@@ -432,7 +495,8 @@ public class TruthDareView extends View {
                                 pointerId));
                 break;
             case MotionEvent.ACTION_UP:
-
+                transitionArcFinished = false;
+                radiusEnlargingCircle = radiusCentralCircle / 30;
                 swipeAngleTransit = 0f;
                 isPressed = false;
                 mVelocityTracker.recycle();
@@ -500,7 +564,7 @@ public class TruthDareView extends View {
     private int generateRandomColor() {
         ArrayList<Integer> colors = new ArrayList<>();
         Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(230), rnd.nextInt(230), rnd.nextInt(230));
+        int color = Color.argb(255, rnd.nextInt(200)+40, rnd.nextInt(200)+40, rnd.nextInt(200)+40);
 
         if (colors.contains(color)) {
             return generateRandomColor();
@@ -512,14 +576,15 @@ public class TruthDareView extends View {
 
    public interface ITruthDare{
         void onResult(Challenger requester, Challenger responder );
+        void onPressed(boolean b);
    }
 
 
 
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
+    public Bitmap getResizedBitmap(Bitmap bmp, int newHeight, int newWidth) {
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
         // CREATE A MATRIX FOR THE MANIPULATION
@@ -528,7 +593,39 @@ public class TruthDareView extends View {
         matrix.postScale(scaleWidth, scaleHeight);
 
         // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    public Bitmap getCroppedScaledBitmap(Bitmap bitmap, int newHeight, int newWidth) {
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        bitmap.recycle();
+        int width = output.getWidth();
+        int height = output.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+//        Bitmap resizedBitmap = Bitmap.createBitmap(output, 0, 0, width, height, matrix, false);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(output, 100, 100, false);
+        //return _bmp;
         return resizedBitmap;
     }
 

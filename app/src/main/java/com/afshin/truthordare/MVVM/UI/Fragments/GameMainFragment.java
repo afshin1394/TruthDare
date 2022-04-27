@@ -28,6 +28,7 @@ import com.afshin.truthordare.Adapters.Class.ChallengerNameAdapter;
 import com.afshin.truthordare.Adapters.Interface.BottleEvents;
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.Challenger;
+import com.afshin.truthordare.CustomViews.BottleView;
 import com.afshin.truthordare.Interfaces.UIEvents;
 import com.afshin.truthordare.MVVM.UI.Activities.MainActivity;
 import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
@@ -60,6 +61,8 @@ public class GameMainFragment extends Fragment implements UIEvents {
     private Context context;
     private BottomSheetBehavior bottomSheetBehavior;
     private TruthDareView truthDareView;
+    private BottleView bottleView;
+    private BottleView.IBottle iBottle;
     private int backCounter = 0;
     private GameMainViewModel gameMainViewModel;
     private BottlesAdapter bottlesAdapter;
@@ -113,7 +116,8 @@ public class GameMainFragment extends Fragment implements UIEvents {
                bottles.clear();
                bottles.addAll(bottleModels);
                bottlesAdapter.notifyDataSetChanged();
-               truthDareView.changeBottleBitmap(bottleModels.get(0).getImage());
+               bottleView.changeBottleBitmap(bottleModels.get(0).getImage());
+//               truthDareView.changeBottleBitmap(bottleModels.get(0).getImage());
             }
         });
 
@@ -136,6 +140,11 @@ public class GameMainFragment extends Fragment implements UIEvents {
 
                 }
             }
+
+            @Override
+            public void onPressed(boolean pressed) {
+
+            }
         });
 
         return view;
@@ -146,8 +155,9 @@ public class GameMainFragment extends Fragment implements UIEvents {
     {
         recyclerView = view.findViewById(R.id.recycler_view);
         bottlesAdapter = new BottlesAdapter(context, bottleModels, bottleModel -> {
-
-            truthDareView.changeBottleBitmap(bottleModel.getImage());
+            bottleView.changeBottleBitmap(bottleModel.getImage());
+//            truthDareView.changeBottleBitmap(bottleModel.getImage());
+            bottleView.changeBottleBitmap(bottleModel.getImage());
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
@@ -156,6 +166,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
 
     private void findViews(View view) {
         truthDareView = view.findViewById(R.id.CV_truthOrDare);
+        bottleView = view.findViewById(R.id.CV_bottle);
         LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linearSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -163,6 +174,14 @@ public class GameMainFragment extends Fragment implements UIEvents {
         FloatingActionButton editChallengers = view.findViewById(R.id.fabEditPlayer);
         FloatingActionMenu menu = view.findViewById(R.id.fabMenu);
 
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+            }
+        });
 
         editChallengers.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,6 +2,8 @@ package com.afshin.truthordare.MVVM.ViewModel;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import com.afshin.truthordare.Utils.Enums.ToastType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -216,5 +219,15 @@ public class BuildGameViewModel extends AndroidViewModel {
 
     public LiveData<BaseInfo> getBaseInfo() {
         return baseInfo;
+    }
+
+    public void checkProfilePic(int position) {
+
+    }
+
+    public void setChallengerImage(Context context,Uri uri, int position) {
+        Objects.requireNonNull(challengers.getValue()).get(position).setImage(uri);
+        ChallengerRepository challengerRepository = ChallengerRepository.Instance(context);
+        challengerRepository.updateImage(uri.toString(),challengers.getValue().get(position).getId());
     }
 }

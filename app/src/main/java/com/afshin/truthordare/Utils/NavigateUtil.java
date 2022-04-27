@@ -15,6 +15,7 @@ public class NavigateUtil
     public static void Navigate(FragmentActivity activity, int actionId, Bundle bundle,int hostId)
     {
         FragmentManager supportFragmentManager = activity.getSupportFragmentManager();
+//        supportFragmentManager.beginTransaction();
         supportFragmentManager.executePendingTransactions();
         NavHostFragment navHostFragment =
                 (NavHostFragment) supportFragmentManager.findFragmentById(hostId);

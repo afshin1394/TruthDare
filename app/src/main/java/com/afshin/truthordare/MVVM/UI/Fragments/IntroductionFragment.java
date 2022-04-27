@@ -1,11 +1,13 @@
 package com.afshin.truthordare.MVVM.UI.Fragments;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +25,7 @@ import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
 import com.afshin.truthordare.MVVM.ViewModel.IntroductionViewModel;
 import com.afshin.truthordare.Models.BottleModel;
 import com.afshin.truthordare.R;
+import com.afshin.truthordare.Utils.Constants;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.afshin.truthordare.Utils.NavigateUtil;
@@ -106,10 +109,11 @@ public class IntroductionFragment extends Fragment implements UIEvents {
             @Override
             public void onChanged(List<BottleModel> bottleModels) {
                 Log.i("bottleModelsGood", "onChanged: "+bottleModels);
-                navigateToGameBuilder();
-
+                introductionViewModel.checkPermissions(context);
             }
         });
+
+
         return fragmentIntroductionBinding.getRoot();
     }
 
@@ -119,9 +123,7 @@ public class IntroductionFragment extends Fragment implements UIEvents {
 
     }
 
-    public void navigateToGameBuilder(){
-         NavigateUtil.Navigate(getActivity(), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -140,5 +142,20 @@ public class IntroductionFragment extends Fragment implements UIEvents {
                 backCounter = 0;
             }
         }, 2000);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.ALL_PERMISSION) {
+
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                introductionViewModel.checkPermissions(context);
+            } else {
+                Log.i("grantPermission", "onRequestPermissionsResult: permissions not granted");
+            }
+
+        }
+
     }
 }

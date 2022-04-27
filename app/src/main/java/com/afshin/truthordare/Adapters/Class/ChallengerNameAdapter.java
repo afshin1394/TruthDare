@@ -1,6 +1,7 @@
 package com.afshin.truthordare.Adapters.Class;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.afshin.truthordare.Challenger;
 import com.afshin.truthordare.Interfaces.ChallengerNameEvents;
 import com.afshin.truthordare.R;
 import com.afshin.truthordare.databinding.BuildGameItemviewBinding;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -25,11 +27,13 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
     List<Challenger> challengers;
     boolean hasDeleteChoice = false;
     private ChallengerNameEvents challengerNameEvents;
+    private Context context;
 
 
 
-    public ChallengerNameAdapter(List<Challenger> challengers,boolean hasDeleteChoice,ChallengerNameEvents challengerNameEvents)
+    public ChallengerNameAdapter(Context context,List<Challenger> challengers,boolean hasDeleteChoice,ChallengerNameEvents challengerNameEvents)
     {
+        this.context = context;
         this.challengerNameEvents = challengerNameEvents;
         this.challengers = challengers;
         this.hasDeleteChoice = hasDeleteChoice;
@@ -62,6 +66,9 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
         public ViewHolderChallengers(BuildGameItemviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.profilePic.setOnClickListener(view -> {
+                challengerNameEvents.onProfilePic(getAdapterPosition());
+            });
             binding.deleteChoice.setOnClickListener(view -> {
                challengerNameEvents.onDelete(getAdapterPosition());
             });
@@ -72,6 +79,13 @@ public class ChallengerNameAdapter extends RecyclerView.Adapter<ChallengerNameAd
          binding.deleteChoice.setVisibility(hasDeleteChoice?View.VISIBLE:View.GONE);
          binding.txtName.setText(challengers.get(position).getName());
          binding.txtName.addTextChangedListener(this);
+
+         Glide.with(binding.profilePic)
+                    .load(challengers.get(position).getImage())
+                    .placeholder(R.drawable.ic_profile_add_pic)
+                    .circleCrop()
+                    .into(binding.profilePic);
+
         }
 
 
