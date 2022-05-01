@@ -74,6 +74,7 @@ public class BuildGameViewModel extends AndroidViewModel {
 
                                     @Override
                                     public void onError(@NonNull Throwable e) {
+                                        Log.i("insertAll", "onError: "+e.getMessage());
                                         baseInfo.postValue(new BaseInfo(ToastType.ERROR, ToastDuration.SHORT, "مشکلی پیش اومده!"));
 
                                     }
@@ -83,6 +84,7 @@ public class BuildGameViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        Log.i("deleteAll", "onError: "+e.getMessage());
                         baseInfo.postValue(new BaseInfo(ToastType.ERROR, ToastDuration.SHORT, "مشکلی پیش اومده!"));
                     }
                 });
@@ -148,7 +150,7 @@ public class BuildGameViewModel extends AndroidViewModel {
 
         Log.i("checkItemSelection", "challengers.size(): " + challengers.size());
         Log.i("checkItemSelection", "challengers" + challengers);
-        this.challengers.postValue(challengers);
+        this.challengers.setValue(challengers);
     }
 
     public void deleteChallenger(int selectedValue, int position) {

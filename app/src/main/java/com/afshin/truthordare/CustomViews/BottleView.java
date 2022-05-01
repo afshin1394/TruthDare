@@ -68,9 +68,10 @@ public class BottleView extends View {
         radiusBigCircle = (Math.min(getWidth(), getHeight()) / 2f )- 6d;
 
         radiusCentralCircle = radiusBigCircle / 2;
-        Log.i("TruthDareView", "init: " + bmp);
+        Log.i("BottleView", "init: " + bmp +"centerX:"+centerX+"centerY:"+centerY+"radiusBigCircle:"+radiusBigCircle+"radiusCentralCircle:"+radiusCentralCircle);
         bottleMatrix = new Matrix();
         bottleBitmap = Bitmap.createScaledBitmap(bmp, (bmp.getWidth() / 2), (bmp.getHeight() / 2), true);
+        Log.i("BottleView", "init: "+bottleBitmap);
     }
     public void setIBottle(IBottle iBottle){
         this.iBottle = iBottle;
@@ -79,9 +80,28 @@ public class BottleView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.i("onDraw", "onDraw: "+imageFilled);
         if(imageFilled) {
             init(chosenBottle);
             drawBottle(canvas);
+            drawTransitionArc(canvas);
+        }
+    }
+    float startAngleTransit = 0f;
+    private void drawTransitionArc(Canvas canvas) {
+        if (isPressed) {
+//            Log.i("drawTransitionArc", "drawTransitionArc: start:"+startAngleTransit+"swipe"+swipeAngleTransit);
+//            canvas.drawArc(transitionArcRect, startAngleTransit, swipeAngleTransit, true, transitionArcPaint);
+            power += 40;
+            swipeAngleTransit += 4f;
+            if (startAngleTransit > 360f)
+            {
+                isPressed = false;
+                swipeAngleTransit = 0f;
+            }else{
+                postInvalidateDelayed(1);
+            }
+
         }
     }
 
@@ -93,7 +113,7 @@ public class BottleView extends View {
         postInvalidateDelayed(1);
 
     }
-
+   boolean isPressed = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -121,7 +141,9 @@ public class BottleView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                iBottle.onBottleActionDown(true);
                 postInvalidateDelayed(1);
+                 isPressed = true;
 
                 if(mVelocityTracker == null) {
                     // Retrieve a new VelocityTracker object to watch the velocity of a motion.
@@ -157,7 +179,7 @@ public class BottleView extends View {
                                 pointerId));
                 break;
             case MotionEvent.ACTION_UP:
-
+                iBottle.onBottleActionDown(false);
                 swipeAngleTransit = 0f;
                 mVelocityTracker.recycle();
                 endTouchTime=System.currentTimeMillis();
@@ -173,6 +195,7 @@ public class BottleView extends View {
                 Log.i("speed", "speed: "+speed);
                 bottleAngle = bottleAngle % 360;
                 isReleased = true;
+                isPressed = false;
                 Log.i("power", "power: "+power);
                 randomRotationNumber = power + 30;
                 power = 0;
@@ -198,7 +221,7 @@ public class BottleView extends View {
         Log.i(TAG, "drawBottle: " + radiusCentralCircle);
         Log.i("drawBottle", "drawBottle: "+bottleMatrix+"bmp"+bmp+"arcPaint"+arcPaint);
         canvas.drawBitmap(bmp, bottleMatrix, arcPaint);
-
+        Log.i("isReleased", "drawBottle: "+isReleased);
         if (isReleased) {
             bottleIsTurning = true;
 
@@ -248,39 +271,40 @@ public class BottleView extends View {
 
 
     private void identifyWhoAreGoingToPlay(double bottleAngle) {
-        double responderAngle = bottleAngle % 360 - 90;
-        double requesterAngle = bottleAngle % 360 + 90;
-
-        Challenger requester = null;
-        Challenger responder = null;
-
-
-        if (requesterAngle < 0)
-            requesterAngle += 360;
-
-        if (responderAngle < 0)
-            responderAngle += 360;
-
-
-        if (responderAngle > 360)
-            responderAngle = responderAngle % 360;
-
-
-        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + requesterAngle + " " + responderAngle);
-        for (Challenger challenger : challengers) {
-            if (challenger.getStartAngle() < requesterAngle && challenger.getEndAngle() > requesterAngle) {
-                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + challenger.getName());
-                requester = challenger;
-
-            }
-            if (challenger.getStartAngle() < responderAngle && challenger.getEndAngle() > responderAngle) {
-                responder = challenger;
-
-            }
-
-
-        }
         iBottle.identifyWhoAreGoingToPlay(bottleAngle);
+//        double responderAngle = bottleAngle % 360 - 90;
+//        double requesterAngle = bottleAngle % 360 + 90;
+//
+//        Challenger requester = null;
+//        Challenger responder = null;
+//
+//
+//        if (requesterAngle < 0)
+//            requesterAngle += 360;
+//
+//        if (responderAngle < 0)
+//            responderAngle += 360;
+//
+//
+//        if (responderAngle > 360)
+//            responderAngle = responderAngle % 360;
+//
+//
+//        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + requesterAngle + " " + responderAngle);
+//        for (Challenger challenger : challengers) {
+//            if (challenger.getStartAngle() < requesterAngle && challenger.getEndAngle() > requesterAngle) {
+//                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + challenger.getName());
+//                requester = challenger;
+//
+//            }
+//            if (challenger.getStartAngle() < responderAngle && challenger.getEndAngle() > responderAngle) {
+//                responder = challenger;
+//
+//            }
+//
+//
+//        }
+
     }
     public void setChallengers(List<Challenger> challengers) {
         this.challengers = challengers;
@@ -288,5 +312,7 @@ public class BottleView extends View {
 
     public interface IBottle{
         void identifyWhoAreGoingToPlay(double bottleAngle);
+
+        void onBottleActionDown(boolean b);
     }
 }

@@ -83,16 +83,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layoutDirection="rtl">
-        <com.afshin.truthordare.CustomViews.BottleView
-            android:id="@+id/CV_bottle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <com.afshin.truthordare.CustomViews.TruthDareView
-            android:id="@+id/CV_truthOrDare"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/specPurpleLight" />
 
+        <FrameLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <com.afshin.truthordare.CustomViews.TruthDareView
+            android:layout_gravity="center"
+            android:elevation="@dimen/_1sdp"
+            android:id="@+id/CV_truthOrDare"
+            android:layout_width="@dimen/_300sdp"
+            android:layout_height="@dimen/_300sdp"
+
+            />
+            <com.afshin.truthordare.CustomViews.ExternalCircleView
+                android:layout_gravity="center"
+                android:id="@+id/CV_externalCircleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <com.afshin.truthordare.CustomViews.BottleView
+                android:layout_gravity="center"
+                android:id="@+id/CV_bottle"
+                android:elevation="@dimen/_2sdp"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"/>
+
+
+        </FrameLayout>
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fabMenu"

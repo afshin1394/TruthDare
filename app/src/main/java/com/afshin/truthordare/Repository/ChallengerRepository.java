@@ -52,6 +52,7 @@ public class ChallengerRepository {
                         Challenger challenger = new Challenger();
                         challenger.setId(challengerEntity.getId());
                         challenger.setName(challengerEntity.getName());
+                        if (challengerEntity.getImage()!=null)
                         challenger.setImage(Uri.parse(challengerEntity.getImage()));
                         challenger.setEndAngle(challengerEntity.getEndAngle());
                         challenger.setStartAngle(challengerEntity.getStartAngle());
@@ -69,6 +70,7 @@ public class ChallengerRepository {
                     for (Challenger challenger : challengers1) {
                         ChallengerEntity challengerEntity = new ChallengerEntity();
                         challengerEntity.setColor(challenger.getColor());
+                        if(challenger.getImage()!=null)
                         challengerEntity.setImage(challenger.getImage().toString());
                         challengerEntity.setName(challenger.getName());
                         challengerEntity.setStartAngle(challenger.getStartAngle());

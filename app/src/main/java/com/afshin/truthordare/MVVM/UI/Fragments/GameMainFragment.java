@@ -28,7 +28,9 @@ import com.afshin.truthordare.Adapters.Class.ChallengerNameAdapter;
 import com.afshin.truthordare.Adapters.Interface.BottleEvents;
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.Challenger;
+
 import com.afshin.truthordare.CustomViews.BottleView;
+import com.afshin.truthordare.CustomViews.ExternalCircleView;
 import com.afshin.truthordare.Interfaces.UIEvents;
 import com.afshin.truthordare.MVVM.UI.Activities.MainActivity;
 import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
@@ -44,6 +46,7 @@ import com.afshin.truthordare.Utils.NavigateUtil;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.protobuf.ExtensionRegistryLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +64,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
     private Context context;
     private BottomSheetBehavior bottomSheetBehavior;
     private TruthDareView truthDareView;
+    private ExternalCircleView externalCircleView;
     private BottleView bottleView;
     private BottleView.IBottle iBottle;
     private int backCounter = 0;
@@ -73,6 +77,8 @@ public class GameMainFragment extends Fragment implements UIEvents {
     private View view;
     private RecyclerView recyclerView;
     private List<BottleModel> bottles;
+
+
 
 
     @Override
@@ -92,6 +98,8 @@ public class GameMainFragment extends Fragment implements UIEvents {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,6 +155,20 @@ public class GameMainFragment extends Fragment implements UIEvents {
             }
         });
 
+        bottleView.setIBottle(new BottleView.IBottle() {
+            @Override
+            public void identifyWhoAreGoingToPlay(double bottleAngle) {
+                truthDareView.identifyWhoAreGoingToPlay(bottleAngle);
+            }
+
+            @Override
+            public void onBottleActionDown(boolean down) {
+
+                truthDareView.onBottleActionDown(down);
+                externalCircleView.onBottleActionDown(down);
+            }
+        });
+
         return view;
 
     }
@@ -167,6 +189,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
     private void findViews(View view) {
         truthDareView = view.findViewById(R.id.CV_truthOrDare);
         bottleView = view.findViewById(R.id.CV_bottle);
+        externalCircleView = view.findViewById(R.id.CV_externalCircleView);
         LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linearSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

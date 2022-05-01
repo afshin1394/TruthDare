@@ -95,9 +95,9 @@ public class IntroductionViewModel extends AndroidViewModel {
         boolean hasPermission = PermissionUtils.hasPermissions(context,permissions);
         Log.i("hasPremission", "checkPermissions: "+hasPermission);
         if (!hasPermission){
-         ActivityCompat.requestPermissions(((Activity) context), permissions, ALL_PERMISSIONS);
+        ActivityCompat.requestPermissions(((FragmentActivity) context),permissions, ALL_PERMISSIONS);
         }else{
-          NavigateUtil.Navigate(((FragmentActivity) context), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
+            NavigateUtil.Navigate(((FragmentActivity) context), R.id.action_introductionFragment_to_bulidGameFragment,null,R.id.nav_host_fragment);
         }
 
     }

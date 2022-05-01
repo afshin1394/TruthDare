@@ -145,9 +145,11 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             public void onChanged(List<Challenger> challengers) {
                 BuildGameFragment.this.challengers = challengers;
 
-                Log.i("BuildGameFragmentx", "getAllChallengersLiveData: "+challengers.toString());
+                Log.i("getAllChallengersLiveData", "getAllChallengersLiveData: "+challengers.toString());
                 Log.i("getAllChallengersLiveData", "selectedValue: "+selectedValue);
                 initializeRecyclerView(challengers,hasDeleteChoice);
+                Log.i("getAllChallengersLiveData", "init spinner:"+initSpinner );
+
                 if (initSpinner)
                 {
                     Log.i("initializeSpinner", "initializeSpinner: "+selectedValue);
@@ -184,6 +186,8 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
         adapter.setDropDownViewResource(R.layout.drop_down_item);
         fragmentBulidGameBinding.SPNumberOfChallengers.setAdapter(adapter);
         fragmentBulidGameBinding.SPNumberOfChallengers.setOnItemSelectedListener(this);
+        Log.i("initializeSpinner", "initializeSpinner: init spinner:"+initSpinner +"challengers size:"+challengers.size() );
+
     }
 
     private void initializeRecyclerView(List<Challenger> challengers,boolean hasDeleteChoice) {
@@ -254,6 +258,7 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i("initSpinner", "onItemSelected: "+initSpinner);
         if (initSpinner)
         {
             initSpinner = false;

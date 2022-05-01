@@ -1,11 +1,14 @@
 package com.afshin.truthordare.MVVM.UI.Fragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
@@ -29,6 +32,7 @@ import com.afshin.truthordare.Utils.Constants;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.afshin.truthordare.Utils.NavigateUtil;
+import com.afshin.truthordare.Utils.PermissionUtils;
 import com.afshin.truthordare.databinding.FragmentIntroductionBinding;
 
 import java.util.List;
@@ -103,15 +107,8 @@ public class IntroductionFragment extends Fragment implements UIEvents {
 
         fragmentIntroductionBinding = FragmentIntroductionBinding.inflate(getLayoutInflater(), container, false);
         introductionViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(IntroductionViewModel.class);
-        introductionViewModel.getBottles(getActivity());
 
-        introductionViewModel.getBottlesLiveData().observe(getViewLifecycleOwner(), new Observer<List<BottleModel>>() {
-            @Override
-            public void onChanged(List<BottleModel> bottleModels) {
-                Log.i("bottleModelsGood", "onChanged: "+bottleModels);
-                introductionViewModel.checkPermissions(context);
-            }
-        });
+
 
 
         return fragmentIntroductionBinding.getRoot();
@@ -144,18 +141,7 @@ public class IntroductionFragment extends Fragment implements UIEvents {
         }, 2000);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Constants.ALL_PERMISSION) {
 
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                introductionViewModel.checkPermissions(context);
-            } else {
-                Log.i("grantPermission", "onRequestPermissionsResult: permissions not granted");
-            }
 
-        }
 
-    }
 }
