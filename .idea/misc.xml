@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22395833333333334" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable-v24/ic_question.xml" value="0.175" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable-v24/shape_dialog_alarm.xml" value="0.175" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/button_choice_style.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/button_style.xml" value="0.15885416666666666" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/drawable/card_choice_style.xml" value="0.2234375" />
@@ -35,6 +37,7 @@
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/bottom_sheet.xml" value="0.22447916666666667" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/build_game_itemview.xml" value="0.14930555555555555" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/challenger_itemview.xml" value="0.2517482517482518" />
+        <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/choose_image_dialog.xml" value="0.22" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/drop_down_item.xml" value="0.18854166666666666" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_action.xml" value="0.1765625" />
         <entry key="..\:/AndroidProjects/truthdare/app/src/main/res/layout/fragment_bulid_game.xml" value="0.2303206997084548" />

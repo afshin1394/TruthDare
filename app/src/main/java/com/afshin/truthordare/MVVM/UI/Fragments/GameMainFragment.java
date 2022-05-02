@@ -149,10 +149,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
                 }
             }
 
-            @Override
-            public void onPressed(boolean pressed) {
 
-            }
         });
 
         bottleView.setIBottle(new BottleView.IBottle() {
@@ -163,7 +160,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
 
             @Override
             public void onBottleActionDown(boolean down) {
-
+                Log.i("actionDown", "step1"+down);
                 truthDareView.onBottleActionDown(down);
                 externalCircleView.onBottleActionDown(down);
             }

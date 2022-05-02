@@ -14,4 +14,7 @@
     <string name="exitGame">برای اینکه از بازی بری بیرون یبار دیگه بزن!</string>
     <string name="edit_player">بازیکناروعوض کن</string>
     <string name="chooseBottle">بطری انتخاب کن</string>
+    <string name="Camera">دوربین</string>
+    <string name="ImageUpload">آپلود عکس</string>
+    <string name="SetImageMessage">چجوری میخوای عکستو آپلود کنی؟</string>
 </resources>

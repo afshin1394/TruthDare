@@ -30,33 +30,38 @@ public class ExternalCircleView extends View {
     private Paint transitionArcPaint;
     private RectF transitionArcRect;
     private double radiusBigCircle;
+    private boolean init;
+
     public ExternalCircleView(Context context) {
         super(context);
         this.context = context;
+        init = true;
     }
 
     public ExternalCircleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        init = true;
     }
 
     public ExternalCircleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
+        init = true;
+
     }
 
     public ExternalCircleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.context = context;
+        init = true;
     }
 
-    private void init()
-    {
+    private void init() {
 
-
+        Log.i("initt", "init: "+init);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/b_bardiya.ttf");
         Typeface.create(tf, Typeface.NORMAL);
-
 
 
         //Canvas
@@ -64,22 +69,12 @@ public class ExternalCircleView extends View {
         centerY = getHeight() / 2f;
 
 
-
-
-        radiusBigCircle = (Math.min(getWidth(), getHeight()) / 2f )- 6d;
-        radiusExternalCircle = radiusBigCircle ;
-
-
-
-
+        radiusBigCircle = (Math.min(getWidth(), getHeight()) / 2f) - 20d;
+        radiusExternalCircle = radiusBigCircle;
 
 
         transitionArcRect = new RectF();
-        transitionArcRect.set(((float) (centerX - radiusExternalCircle )), ((float) (centerY - radiusExternalCircle )), ((float) (centerX + radiusExternalCircle )), ((float) (centerY + radiusExternalCircle )));
-
-
-
-
+        transitionArcRect.set(((float) (centerX - radiusExternalCircle)), ((float) (centerY - radiusExternalCircle)), ((float) (centerX + radiusExternalCircle)), ((float) (centerY + radiusExternalCircle)));
 
 
         transitionArcPaint = new Paint();
@@ -87,46 +82,46 @@ public class ExternalCircleView extends View {
         transitionArcPaint.setColor(context.getColor(R.color.flame));
 
 
-
-
         externalCirclePaint = new Paint();
         externalCirclePaint.setAntiAlias(true);
         externalCirclePaint.setColor(context.getColor(R.color.mauve));
 
 
-
-
     }
 
 
-    boolean bottleIsPressed= false;
+    boolean bottleIsPressed = false;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Log.i("onDraw", "onDraw: ");
+        if (init)
         init();
+
+
         drawExternalCircle(canvas);
         drawTransitionArc(canvas);
+
+
     }
+
     float startAngleTransit = 0f;
     float swipeAngleTransit = 0.1f;
     int power = 0;
+
     private void drawTransitionArc(Canvas canvas) {
-        Log.i("swipeAnglee", "drawTransitionArc: "+swipeAngleTransit);
+        init = false;
+        Log.i("drawTransitionArc", "drawTransitionArc: " + swipeAngleTransit);
         if (bottleIsPressed) {
-            Log.i("drawTransitionArc", "drawTransitionArc: start:"+startAngleTransit+"swipe"+swipeAngleTransit);
+            Log.i("drawTransitionArc", "drawTransitionArc: start:" + startAngleTransit + "swipe" + swipeAngleTransit);
             canvas.drawArc(transitionArcRect, startAngleTransit, swipeAngleTransit, true, transitionArcPaint);
             power += 40;
             swipeAngleTransit += 4f;
-            if (startAngleTransit > 360f)
-            {
-                startAngleTransit = 0f;
-                swipeAngleTransit = 0f;
-                bottleIsPressed = false;
 
-            }else{
-                postInvalidateDelayed(1);
-            }
-
+            Log.i("drawTransitionArc", "startAngleTransit <= 360f");
+            invalidate();
         }
     }
 
@@ -136,11 +131,12 @@ public class ExternalCircleView extends View {
 
 
     public void onBottleActionDown(boolean down) {
+        Log.i("actionDown", "step1" + down);
         this.bottleIsPressed = down;
         if (!bottleIsPressed) {
             startAngleTransit = 0f;
             swipeAngleTransit = 0f;
         }
-        postInvalidateDelayed(1);
+        invalidate();
     }
 }

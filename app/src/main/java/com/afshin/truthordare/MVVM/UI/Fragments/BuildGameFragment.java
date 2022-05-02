@@ -41,6 +41,7 @@ import android.widget.ArrayAdapter;
 import com.afshin.truthordare.Adapters.Class.ChallengerNameAdapter;
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.Challenger;
+import com.afshin.truthordare.CustomViews.IImageDialog;
 import com.afshin.truthordare.CustomViews.Toast;
 import com.afshin.truthordare.Interfaces.ChallengerNameEvents;
 import com.afshin.truthordare.Interfaces.UIEvents;
@@ -212,33 +213,26 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
 
     private void startDialog(int position) {
         this.position = position;
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
-                getActivity());
-        myAlertDialog.setTitle("Upload Pictures Option");
-        myAlertDialog.setMessage("How do you want to set your picture?");
-        myAlertDialog.setPositiveButton("Gallery",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent pictureActionIntent = null;
-                        pictureActionIntent = new Intent(
-                                Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(
-                                pictureActionIntent,
-                                GALLERY_PICTURE);
 
+        new com.afshin.truthordare.CustomViews.AlertDialog().ImageDialog(context, new IImageDialog() {
+            @Override
+            public void onClickGallery() {
+                Intent pictureActionIntent = null;
+                pictureActionIntent = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(
+                        pictureActionIntent,
+                        GALLERY_PICTURE);
+            }
 
-                    }
-                });
+            @Override
+            public void onClickCamera() {
+                openCamera(CAMERA_REQUEST);
 
-        myAlertDialog.setNegativeButton("Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
 
-                          openCamera(CAMERA_REQUEST);
-                    }
-                });
-        myAlertDialog.show();
     }
 
     public void openCamera(int requestCode) {

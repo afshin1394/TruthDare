@@ -63,8 +63,7 @@ public class TruthDareView extends View {
     private List<Challenger> challengers = new ArrayList<>();
     private double startAngle;
     private double swipeAngle;
-    private int numberOfChallengers;
-    private boolean isInit = false;
+
     private double screenPadding;
     private double bottleAngle = 1;
     private Bitmap bmp;
@@ -130,17 +129,8 @@ public class TruthDareView extends View {
             }
         }
 
-        Log.i("TruthDareView", "init: "+scale);
 
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inSampleSize = 1;
-        if (image!=null)
-        bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
 
-        Log.i("TruthDareView", "init: "+bmp);
-        bottleMatrix = new Matrix();
-        if (bmp!=null)
-        bottleBitmap = Bitmap.createScaledBitmap(bmp,(bmp.getWidth()/2 ),(bmp.getHeight()/2),true);
 
 
         //Canvas
@@ -149,12 +139,6 @@ public class TruthDareView extends View {
 
 
 
-        //Bottle
-        if (bmp!=null) {
-            centerXBitmap = (getWidth() - bmp.getWidth()) / 2f;
-            centerYBitmap = (getHeight() - bmp.getHeight()) / 2f;
-            Log.i("TruthDareView", "init: centerxBitmap:" + centerXBitmap + "centerYBitmap:" + centerYBitmap);
-        }
 
         radiusBigCircle = (Math.min(getWidth(), getHeight()) / 2f )- 6d;
         radiusCentralCircle = radiusBigCircle / 2;
@@ -165,7 +149,6 @@ public class TruthDareView extends View {
 
 
         arcRect = new RectF();
-//        arcRect.set(((float) (radiusCentralCircle * Math.cos(swipeAngle)))/4, ((float) (radiusCentralCircle * Math.sin(swipeAngle)))/4, ((float) (radiusCentralCircle * Math.cos(swipeAngle) + radiusCentralCircle))/4, ((float) (radiusCentralCircle * Math.sin(swipeAngle) + radiusCentralCircle))/4);
         Log.i("reces", "init: " + centerX + " " + centerY + " " + radiusBigCircle);
         arcRect.set(((float) (centerX - radiusBigCircle + screenPadding)), ((float) (centerY - radiusBigCircle + screenPadding)), ((float) (centerX + radiusBigCircle - screenPadding)), ((float) (centerY + radiusBigCircle - screenPadding)));
 
@@ -207,31 +190,20 @@ public class TruthDareView extends View {
 
     }
 
-    public void changeBottleBitmap(byte[] image)
-    {
-        this.chosenBottle = image;
-        imageFilled = true;
-        postInvalidateDelayed(1);
-    }
 
-private boolean bottleActionDown;
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        if (imageFilled) {
-//        if (!bottleActionDown) {
+
             init(chosenBottle);
-//            drawExternalCircle(canvas);
 
             drawArcs(canvas);
             drawNames(canvas, challengers);
             drawImages(canvas, challengers);
             drawCentralCircle(canvas);
-//        }else {
-////            drawTransitionArc(canvas);
-//        }
-//            drawEnlargingCircle(canvas);
-//        }
+
     }
     float startAngleTransit = 0f;
     float swipeAngleTransit = 0.1f;
@@ -442,97 +414,11 @@ private boolean bottleActionDown;
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     }
-    boolean isTouch = false;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
            return false;
-//
-//        isTouch = true;
-//        if (bottleIsTurning)
-//            return false;
-//        Log.i("onTouchEvent", "onTouchEvent: " + event.getAction());
-//        float firstTouchX = 0;
-//        float firstTouchY = 0;
-//        long firstTouchTime= 0;
-//        VelocityTracker mVelocityTracker = VelocityTracker.obtain();
-//
-//        int index = event.getActionIndex();
-//        int action = event.getActionMasked();
-//        int pointerId = event.getPointerId(index);
-//
-//
-//        float endTouchX = 0;
-//        float endTouchY = 0;
-//        long endTouchTime = 0;
-//
-//        long timeLapTouches = 0;
-//
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                isPressed = true;
-//                postInvalidateDelayed(1);
-//
-//                if(mVelocityTracker == null) {
-//                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
-//
-//                }
-//                else {
-//                    // Reset the velocity tracker back to its initial state.
-//                    mVelocityTracker.clear();
-//                }
-//                // Add a user's movement to the tracker.
-//                mVelocityTracker.addMovement(event);
-//                firstTouchTime = System.currentTimeMillis();
-//                firstTouchX = event.getX();
-//                firstTouchY = event.getY();
-//
-//
-//
-//                Log.i("onTouchEvent", "ACTION_DOWN "+firstTouchTime);
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                mVelocityTracker.addMovement(event);
-//                // When you want to determine the velocity, call
-//                // computeCurrentVelocity(). Then call getXVelocity()
-//                // and getYVelocity() to retrieve the velocity for each pointer ID.
-//                mVelocityTracker.computeCurrentVelocity(1000);
-//                // Log velocity of pixels per second
-//                // Best practice to use VelocityTrackerCompat where possible.
-//                Log.d("ACTION_MOVE", "X velocity: " +
-//                        VelocityTrackerCompat.getXVelocity(mVelocityTracker,
-//                                pointerId));
-//                Log.d("ACTION_MOVE", "Y velocity: " +
-//                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
-//                                pointerId));
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                transitionArcFinished = false;
-//                radiusEnlargingCircle = radiusCentralCircle / 30;
-//                swipeAngleTransit = 0f;
-//                isPressed = false;
-//                mVelocityTracker.recycle();
-//                endTouchTime=System.currentTimeMillis();
-//                Log.i("onTouchEvent", "endTouchTime: "+endTouchTime);
-//                endTouchX = event.getX();
-//                endTouchY = event.getY();
-////                double distance = ( Math.sqrt((endTouchX - firstTouchX) * (endTouchY - firstTouchX) + (endTouchY - firstTouchY) * (firstTouchY - endTouchY)));
-//                double distance = Math.sqrt((endTouchX-firstTouchX) * (endTouchX-firstTouchX) + (endTouchY-firstTouchY) * (endTouchY-endTouchY));
-//                double hypotDistance = Math.hypot(endTouchX - firstTouchX, endTouchY - firstTouchY);
-//                timeLapTouches = endTouchTime-firstTouchTime;
-//                Log.i("onTouchEvent", " distance :"+distance+"hypotDistance"+hypotDistance+""+timeLapTouches);
-//                double speed = distance / timeLapTouches;
-//                Log.i("speed", "speed: "+speed);
-//                bottleAngle = bottleAngle % 360;
-//                isReleased = true;
-//                Log.i("power", "power: "+power);
-//                randomRotationNumber = power + 30;
-//                power = 0;
-//                invalidate();
-//                break;
-//            default:
-//                break;
-//        }
-//        return true;
+
     }
 
     public List<Challenger> getChallengers() {
@@ -584,7 +470,7 @@ private boolean bottleActionDown;
             return color;
         }
     }
-
+    private boolean bottleActionDown;
     public void onBottleActionDown(boolean down) {
                this.bottleActionDown = down;
                if (down){
@@ -594,26 +480,9 @@ private boolean bottleActionDown;
 
     public interface ITruthDare{
         void onResult(Challenger requester, Challenger responder );
-        void onPressed(boolean b);
    }
 
 
-
-
-    public Bitmap getResizedBitmap(Bitmap bmp, int newHeight, int newWidth) {
-        int width = bmp.getWidth();
-        int height = bmp.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, false);
-        return resizedBitmap;
-    }
 
     public Bitmap getCroppedScaledBitmap(Bitmap bitmap, int newHeight, int newWidth) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);

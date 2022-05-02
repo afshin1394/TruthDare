@@ -143,7 +143,7 @@ public class BottleView extends View {
             case MotionEvent.ACTION_DOWN:
                 iBottle.onBottleActionDown(true);
                 postInvalidateDelayed(1);
-                 isPressed = true;
+                isPressed = true;
 
                 if(mVelocityTracker == null) {
                     // Retrieve a new VelocityTracker object to watch the velocity of a motion.
@@ -272,39 +272,6 @@ public class BottleView extends View {
 
     private void identifyWhoAreGoingToPlay(double bottleAngle) {
         iBottle.identifyWhoAreGoingToPlay(bottleAngle);
-//        double responderAngle = bottleAngle % 360 - 90;
-//        double requesterAngle = bottleAngle % 360 + 90;
-//
-//        Challenger requester = null;
-//        Challenger responder = null;
-//
-//
-//        if (requesterAngle < 0)
-//            requesterAngle += 360;
-//
-//        if (responderAngle < 0)
-//            responderAngle += 360;
-//
-//
-//        if (responderAngle > 360)
-//            responderAngle = responderAngle % 360;
-//
-//
-//        Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + requesterAngle + " " + responderAngle);
-//        for (Challenger challenger : challengers) {
-//            if (challenger.getStartAngle() < requesterAngle && challenger.getEndAngle() > requesterAngle) {
-//                Log.i("bottleAngles", "identifyWhoIsGoingToBeAsked: " + challenger.getName());
-//                requester = challenger;
-//
-//            }
-//            if (challenger.getStartAngle() < responderAngle && challenger.getEndAngle() > responderAngle) {
-//                responder = challenger;
-//
-//            }
-//
-//
-//        }
-
     }
     public void setChallengers(List<Challenger> challengers) {
         this.challengers = challengers;
