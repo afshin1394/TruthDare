@@ -27,27 +27,37 @@ import com.saphamrah.protos.QuestionResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.grpc.stub.StreamObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import retrofit2.Response;
-
+@HiltViewModel
 public class GameChoiceViewModel extends AndroidViewModel {
     MutableLiveData<List<GameChoiceModel>> gameChoices = new MutableLiveData<>();
     MutableLiveData<Error> error =  new MutableLiveData<>();
 
 
+   private CategoryRepository categoryRepository;
+   private QuestionRepository questionRepository;
+   private DareRepository dareRepository;
 
-
-    public GameChoiceViewModel(Application application) {
+   @Inject
+    public GameChoiceViewModel(Application application,CategoryRepository categoryRepository
+            ,QuestionRepository questionRepository
+     ,DareRepository dareRepository) {
        super(application);
-
+       this.categoryRepository = categoryRepository;
+       this.questionRepository = questionRepository;
+       this.dareRepository  = dareRepository;
     }
 
 
     public void getQuestions() {
-        QuestionRepository.Instance().getQuestions()
+        questionRepository.getQuestions()
                 .map((Function<BaseResponse<Questions>, List<GameChoiceModel>>) questionsBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
                     for (Questions question : questionsBaseResponse.getResult()) {
@@ -78,7 +88,7 @@ public class GameChoiceViewModel extends AndroidViewModel {
     }
 
     public void getDares() {
-        DareRepository.Instance().getDares()
+        dareRepository.getDares()
                 .map(daresBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
                     for (Dares dares : daresBaseResponse.getResult()) {
@@ -129,7 +139,7 @@ public class GameChoiceViewModel extends AndroidViewModel {
 
 
     public void getAllCategories(){
-        CategoryRepository.Instance().getCategories()
+        categoryRepository.getCategories()
                 .map(daresBaseResponse -> {
                     List<GameChoiceModel> gameChoiceModels = new ArrayList<>();
                     for (Categories categories : daresBaseResponse.getResult()) {

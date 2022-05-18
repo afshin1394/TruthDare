@@ -8,6 +8,8 @@ import com.afshin.truthordare.Service.Pojo.Dares;
 import com.afshin.truthordare.Service.Reactive.RxHttpErrorHandler;
 import com.afshin.truthordare.Service.Responses.BaseResponse;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -15,17 +17,12 @@ import retrofit2.Response;
 
 public class DareRepository {
 
-    private static DareRepository dareRepository;
-    private static ApiService apiService;
+    private  DareRepository dareRepository;
+    private  ApiService apiService;
 
-    public static DareRepository Instance(){
-        if (apiService == null) {
-            apiService = ApiClient.createService(ApiService.class);
-        }
-        if (dareRepository == null){
-            dareRepository = new DareRepository();
-        }
-        return dareRepository;
+    @Inject
+    public  DareRepository(ApiService apiService){
+       this.apiService = apiService;
     }
 
 
@@ -38,8 +35,6 @@ public class DareRepository {
               .map(Response::body);
     }
 
-    public  void   getDareByCategory(){
 
-    }
 
 }

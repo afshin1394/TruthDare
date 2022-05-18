@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -31,15 +33,12 @@ import retrofit2.Response;
 public class ChallengerRepository {
 
     private static ChallengerRepository challengerRepository;
-    private static ChallengerDao challengerDao;
-    public static ChallengerRepository Instance(Context context){
-        if (challengerDao == null) {
-            challengerDao = DataBase.getInstance(context).challengerDao();
-        }
-        if (challengerRepository == null){
-            challengerRepository = new ChallengerRepository();
-        }
-        return challengerRepository;
+    private  ChallengerDao challengerDao;
+    private  ApiService apiService;
+    @Inject
+    public  ChallengerRepository (ChallengerDao challengerDao,ApiService apiService){
+        this.challengerDao = challengerDao;
+        this.apiService = apiService;
     }
 
     public Single<List<Challenger>> getAll() {

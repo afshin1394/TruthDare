@@ -59,13 +59,15 @@ import com.afshin.truthordare.databinding.FragmentBulidGameBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
 
-
+@AndroidEntryPoint
 public class BuildGameFragment extends Fragment implements AdapterView.OnItemSelectedListener, UIEvents {
 
 
@@ -107,7 +109,7 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        buildGameViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(BuildGameViewModel.class);
+        buildGameViewModel = new ViewModelProvider(getActivity()).get(BuildGameViewModel.class);
 
         fragmentBulidGameBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bulid_game, container, false);
         return fragmentBulidGameBinding.getRoot();
@@ -292,26 +294,22 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             }
         }, 2000);
     }
-    Bitmap bitmap;
-    String selectedImagePath;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-
 
                 if(resultCode == RESULT_OK)
                 {
                     switch (requestCode){
                         case CAMERA_REQUEST:
-                            buildGameViewModel.setChallengerImage(context,imageUri,position);
+                            buildGameViewModel.setChallengerImage(imageUri,position);
                             challengerNameAdapter.notifyItemChanged(position);
                             break;
 
                         case GALLERY_PICTURE:
                             Uri selectedImage = data.getData();
-                            buildGameViewModel.setChallengerImage(context,selectedImage,position);
+                            buildGameViewModel.setChallengerImage(selectedImage,position);
                             challengerNameAdapter.notifyItemChanged(position);
                             break;
                     }

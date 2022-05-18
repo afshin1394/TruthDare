@@ -26,20 +26,25 @@ import com.afshin.truthordare.Utils.PermissionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import retrofit2.Response;
-
+@HiltViewModel
 public class IntroductionViewModel extends AndroidViewModel {
 
     private Application application;
-    public IntroductionViewModel(@NonNull Application application) {
+    private BottleRepository bottleRepository;
+    @Inject
+    public IntroductionViewModel(@NonNull Application application,BottleRepository bottleRepository) {
 
         super(application);
         this.application = application;
-
+        this.bottleRepository = bottleRepository;
 
     }
     MutableLiveData<List<BottleModel>> bottles = new MutableLiveData<>();
@@ -47,8 +52,9 @@ public class IntroductionViewModel extends AndroidViewModel {
     MutableLiveData<Boolean> permissionGranted = new MutableLiveData<>();
 
 
-    public void getBottles(Context context){
-        BottleRepository.Instance(context).getBottles()
+    public void getBottles()
+    {
+        bottleRepository.getBottles()
                 .subscribe(new SingleObserver<List<BottleModel>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.afshin.truthordare.BaseApplication;
 import com.afshin.truthordare.CustomViews.Toast;
+import com.afshin.truthordare.Utils.Constants;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.Utils.Enums.ToastType;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -26,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class ApiClient {
 
-    public static final String BaseUrl = "https://192.168.80.181:5001/";
+
 
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
@@ -41,7 +42,7 @@ public  class ApiClient {
 
     private static Retrofit.Builder builder = new Retrofit
             .Builder()
-            .baseUrl(BaseUrl)
+            .baseUrl(Constants.BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create());
     public static <S> S createService(Class<S> serviceClass) {

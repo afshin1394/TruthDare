@@ -37,12 +37,15 @@ import com.afshin.truthordare.databinding.FragmentIntroductionBinding;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link IntroductionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 public class IntroductionFragment extends Fragment implements UIEvents {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -106,7 +109,7 @@ public class IntroductionFragment extends Fragment implements UIEvents {
                              Bundle savedInstanceState) {
 
         fragmentIntroductionBinding = FragmentIntroductionBinding.inflate(getLayoutInflater(), container, false);
-        introductionViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(IntroductionViewModel.class);
+        introductionViewModel = new ViewModelProvider(getActivity()).get(IntroductionViewModel.class);
 
 
 

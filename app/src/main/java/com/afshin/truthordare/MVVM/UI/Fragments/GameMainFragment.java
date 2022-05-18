@@ -51,10 +51,13 @@ import com.google.protobuf.ExtensionRegistryLite;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 public class GameMainFragment extends Fragment implements UIEvents {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -104,7 +107,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        gameMainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(GameMainViewModel.class);
+        gameMainViewModel = new ViewModelProvider(getActivity()).get(GameMainViewModel.class);
 
         // Inflate the layout for this fragment
         List<Challenger> challengers = getArguments().getParcelableArrayList("challengers");
@@ -116,7 +119,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
         view = inflater.inflate(R.layout.fragment_game_main, container, false);
         bottles = new ArrayList<>();
         findViews(view);
-        gameMainViewModel.getBottles(context);
+        gameMainViewModel.getBottles();
         gameMainViewModel.getLocalBottlesLiveData().observe(getViewLifecycleOwner(), new Observer<List<BottleModel>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override

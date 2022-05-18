@@ -24,23 +24,32 @@ import com.afshin.truthordare.Utils.PermissionUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-
+@HiltViewModel
 public class MainActivityViewModel extends AndroidViewModel {
     MutableLiveData<Boolean> deleteChallengers = new MutableLiveData<>();
     MutableLiveData<Error> error = new MutableLiveData<>();
     MutableLiveData<List<BottleModel>> bottles = new MutableLiveData<>();
+    BottleRepository bottleRepository;
+    ChallengerRepository challengerRepository;
 
-    public MainActivityViewModel(@NonNull Application application) {
+    @Inject
+    public MainActivityViewModel(@NonNull Application application,BottleRepository bottleRepository,ChallengerRepository challengerRepository) {
         super(application);
+        this.bottleRepository = bottleRepository;
+        this.challengerRepository = challengerRepository;
     }
-    public void getBottles(Context context){
-        BottleRepository.Instance(context).getBottles()
+    public void getBottles(){
+        bottleRepository.getBottles()
                 .subscribe(new SingleObserver<List<BottleModel>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        Log.i("bottles", "onSubscribe ");
 
                     }
 
@@ -60,7 +69,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     }
     public void deleteAllChallengers(Context context) {
-        ChallengerRepository challengerRepository = ChallengerRepository.Instance(context);
+
         challengerRepository.deleteAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Integer>() {

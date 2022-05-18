@@ -10,6 +10,9 @@ import androidx.core.graphics.TypefaceCompatUtil;
 
 import com.afshin.truthordare.Utils.TypeFaceUtil;
 
+import dagger.hilt.android.HiltAndroidApp;
+
+@HiltAndroidApp
 public class BaseApplication extends Application {
 
     private static BaseApplication instance = null;

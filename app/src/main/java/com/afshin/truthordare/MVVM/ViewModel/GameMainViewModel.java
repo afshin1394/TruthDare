@@ -14,19 +14,26 @@ import com.afshin.truthordare.Repository.BottleRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
-
+@HiltViewModel
 public class GameMainViewModel extends AndroidViewModel {
-    public GameMainViewModel(@NonNull Application application) {
+    BottleRepository bottleRepository;
+    @Inject
+    public GameMainViewModel(@NonNull Application application,BottleRepository bottleRepository) {
         super(application);
+        this.bottleRepository = bottleRepository;
     }
 
     MutableLiveData<List<BottleModel>> bottles = new MutableLiveData<>();
     MutableLiveData<Error> error = new MutableLiveData<>();
 
-    public void getBottles(Context context){
-        BottleRepository.Instance(context).getLocalBottles()
+
+    public void getBottles(){
+        bottleRepository.getLocalBottles()
                 .subscribe(new SingleObserver<List<BottleModel>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

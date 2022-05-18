@@ -10,25 +10,23 @@ import com.saphamrah.protos.CategoryIDRequest;
 import com.saphamrah.protos.QuestionResponse;
 import com.saphamrah.protos.QuestionaireGrpc;
 
+import javax.inject.Inject;
+
 import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
+
 public  class QuestionRepository {
 
-    private static QuestionRepository questionRepository;
-    private static ApiService apiService;
+    private  ApiService apiService;
 
-    public static QuestionRepository Instance(){
-        if (apiService == null) {
-            apiService = ApiClient.createService(ApiService.class);
-        }
-        if (questionRepository == null){
-            questionRepository = new QuestionRepository();
-        }
-        return questionRepository;
+
+    @Inject
+    public  QuestionRepository( ApiService apiService){
+        this.apiService = apiService;
     }
 
 
@@ -40,11 +38,6 @@ public  class QuestionRepository {
                .map(Response::body);
    }
 
-    public  void  getQuestionByCategory(int type,StreamObserver<QuestionResponse> streamObserver){
-//        ManagedChannel managedChannel = GrpcChannel.channel();
-//        QuestionaireGrpc.QuestionaireStub QuestionStub = QuestionaireGrpc.newStub(managedChannel);
-//        CategoryIDRequest categoryIDRequest = CategoryIDRequest.newBuilder().setCategoryIDRequest(type).build();
-//        QuestionStub.getQuestionsByCategoryID(categoryIDRequest,streamObserver);
-    }
+
 
 }

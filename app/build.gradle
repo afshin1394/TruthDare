@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 31
@@ -146,6 +147,18 @@ android {
         // dimens
         implementation 'com.intuit.sdp:sdp-android:1.0.6'
         implementation 'com.intuit.ssp:ssp-android:1.0.6'
+
+
+        implementation 'com.google.dagger:hilt-android:2.41'
+        annotationProcessor 'com.google.dagger:hilt-compiler:2.41'
+
+        // For instrumentation tests
+        androidTestImplementation  'com.google.dagger:hilt-android-testing:2.41'
+        androidTestAnnotationProcessor 'com.google.dagger:hilt-compiler:2.41'
+
+        // For local unit tests
+        testImplementation 'com.google.dagger:hilt-android-testing:2.41'
+        testAnnotationProcessor 'com.google.dagger:hilt-compiler:2.41'
     }
 
 

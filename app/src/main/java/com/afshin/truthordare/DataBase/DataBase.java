@@ -16,23 +16,23 @@ import com.afshin.truthordare.Utils.Constants;
 
 @Database(entities = {BottleEntity.class, ChallengerEntity.class}, version = 3, exportSchema = false)
 public abstract class DataBase extends RoomDatabase {
-    private static DataBase Instance;
+//    private static DataBase Instance;
 
     public abstract BottleDao bottleDao();
     public abstract ChallengerDao challengerDao();
 
 
 
-    public static synchronized DataBase getInstance(Context context) {
-        if (Instance == null) {
-
-            Instance = Room.databaseBuilder(context, DataBase.class, Constants.DATA_BASE)
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build();
-        }
-        return Instance;
-    }
+//    public static synchronized DataBase getInstance(Context context) {
+//        if (Instance == null) {
+//
+//            Instance = Room.databaseBuilder(context, DataBase.class, Constants.DATA_BASE)
+//                    .fallbackToDestructiveMigration()
+//                    .allowMainThreadQueries()
+//                    .build();
+//        }
+//        return Instance;
+//    }
 
 
 

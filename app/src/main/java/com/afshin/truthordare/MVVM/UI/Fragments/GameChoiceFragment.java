@@ -38,7 +38,9 @@ import com.saphamrah.protos.Question;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class GameChoiceFragment extends DialogFragment implements UIEvents {
 
     private FragmentGameChoiceBinding fragmentIntroductionBinding;
@@ -79,7 +81,7 @@ public class GameChoiceFragment extends DialogFragment implements UIEvents {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getDialog().getWindow().setBackgroundDrawableResource(R.drawable.rounded_drawable);
-        gameChoiceViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance()).create(GameChoiceViewModel.class);
+        gameChoiceViewModel = new ViewModelProvider(getActivity()).get(GameChoiceViewModel.class);
 
 
         fragmentIntroductionBinding.TVTitle.setText(String.format("%1$s %2$s %3$s %4$s", requester , "از", responder,context.getResources().getString(R.string.ask)));

@@ -28,16 +28,22 @@ import com.afshin.truthordare.databinding.ActivityMainBinding;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
-    private MainActivityViewModel mainActivityViewModel;
+    public MainActivityViewModel mainActivityViewModel;
     private UIEvents uiEvents;
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainActivityViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainActivityViewModel.class);
-        mainActivityViewModel.getBottles(MainActivity.this);
+
+        mainActivityViewModel =  new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mainActivityViewModel.getBottles();
         mainActivityViewModel.getBottlesLiveData().observe(MainActivity.this, bottleModels -> {
             Log.i("bottleModelsGood", "onChanged: "+bottleModels);
             mainActivityViewModel.checkPermissions(MainActivity.this);

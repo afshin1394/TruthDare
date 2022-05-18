@@ -27,22 +27,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-
+@HiltViewModel
 public class BuildGameViewModel extends AndroidViewModel {
     MutableLiveData<Boolean> challengersRefresh = new MutableLiveData<>();
     MutableLiveData<List<Challenger>> challengers = new MutableLiveData<>();
     MutableLiveData<Boolean> deleteChoice = new MutableLiveData<>();
     MutableLiveData<BaseInfo> baseInfo = new MutableLiveData<>();
+    ChallengerRepository challengerRepository;
 
-    public BuildGameViewModel(@NonNull Application application) {
+    @Inject
+    public BuildGameViewModel(@NonNull Application application,ChallengerRepository challengerRepository) {
         super(application);
+        this.challengerRepository = challengerRepository;
     }
 
-    public void refreshChallengers(Context context, List<Challenger> challengerModels) {
-        ChallengerRepository challengerRepository = ChallengerRepository.Instance(context);
+    public void refreshChallengers( List<Challenger> challengerModels) {
+
         challengerRepository.deleteAll()
                 .subscribe(new SingleObserver<Integer>() {
                     @Override
@@ -93,7 +99,7 @@ public class BuildGameViewModel extends AndroidViewModel {
     }
 
     public void getAllChallengers(Context context) {
-        ChallengerRepository challengerRepository = ChallengerRepository.Instance(context);
+
         challengerRepository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<Challenger>>() {
@@ -199,7 +205,7 @@ public class BuildGameViewModel extends AndroidViewModel {
                 }
                 challengers.get(i).setColor(CustomViewUtils.generateRandomColor());
                 if (i == challengers.size() - 1)
-                    refreshChallengers(context, challengers);
+                    refreshChallengers( challengers);
             }
         }
     }
@@ -227,9 +233,8 @@ public class BuildGameViewModel extends AndroidViewModel {
 
     }
 
-    public void setChallengerImage(Context context,Uri uri, int position) {
+    public void setChallengerImage(Uri uri, int position) {
         Objects.requireNonNull(challengers.getValue()).get(position).setImage(uri);
-        ChallengerRepository challengerRepository = ChallengerRepository.Instance(context);
         challengerRepository.updateImage(uri.toString(),challengers.getValue().get(position).getId());
     }
 }

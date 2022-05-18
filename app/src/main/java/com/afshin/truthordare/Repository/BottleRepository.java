@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
@@ -40,21 +42,17 @@ import retrofit2.Response;
 
 public class BottleRepository {
     private static BottleRepository bottleRepository;
-    private static ApiService apiService;
-    private static BottleDao bottleDao;
-    public static  BottleRepository Instance(Context context) {
-        if (bottleDao == null) {
-            bottleDao = DataBase.getInstance(context).bottleDao();
-        }
-        if (apiService == null) {
-            apiService = ApiClient.createService(ApiService.class);
-        }
 
-        if (bottleRepository == null) {
-            bottleRepository = new BottleRepository();
-        }
+    private ApiService apiService;
+    private BottleDao bottleDao;
 
-        return bottleRepository;
+
+
+    @Inject
+    public  BottleRepository(BottleDao bottleDao,ApiService apiService) {
+        this.bottleDao = bottleDao;
+        this.apiService = apiService;
+
     }
 
     public Single<List<BottleModel>> getLocalBottles(){
@@ -91,6 +89,7 @@ public class BottleRepository {
                         bottleEntity.setImage(Base64.decode(bottles.getImage(), Base64.NO_WRAP));
                         bottleEntity.setIsPurchased(bottles.getIsPurchased());
                         bottleEntities.add(bottleEntity);
+                        Log.i("getBottles", "bottleEntities ");
                     }
                      Completable.fromCallable((Callable<Integer>) () -> bottleDao.deleteAll())
                     .subscribeOn(Schedulers.io()).andThen(new Completable() {
@@ -102,17 +101,18 @@ public class BottleRepository {
                                              .subscribe(new Observer<Long[]>() {
                                                  @Override
                                                  public void onSubscribe(@NonNull Disposable d) {
+                                                     Log.i("getBottles", "onSubscribe: "+d);
 
                                                  }
 
                                                  @Override
                                                  public void onNext(@NonNull Long[] longs) {
-
+                                                     Log.i("getBottles", "onNext: "+longs);
                                                  }
 
                                                  @Override
                                                  public void onError(@NonNull Throwable e) {
-
+                                                     Log.i("getBottles", "onError: "+e.getMessage());
                                                  }
 
                                                  @Override
