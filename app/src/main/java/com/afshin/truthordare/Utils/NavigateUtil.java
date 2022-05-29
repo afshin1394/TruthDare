@@ -23,5 +23,7 @@ public class NavigateUtil
 
         navController.navigate(actionId, bundle, NavigationOption.getNavOptions());
     }
+
+
 }
 

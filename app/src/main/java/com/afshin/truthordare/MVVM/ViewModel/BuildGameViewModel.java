@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 @HiltViewModel
 public class BuildGameViewModel extends AndroidViewModel {
@@ -41,19 +42,21 @@ public class BuildGameViewModel extends AndroidViewModel {
     MutableLiveData<BaseInfo> baseInfo = new MutableLiveData<>();
     ChallengerRepository challengerRepository;
 
+
     @Inject
     public BuildGameViewModel(@NonNull Application application,ChallengerRepository challengerRepository) {
         super(application);
         this.challengerRepository = challengerRepository;
     }
 
-    public void refreshChallengers( List<Challenger> challengerModels) {
-
-        challengerRepository.deleteAll()
+    public void refreshChallengers(List<Challenger> challengerModels) {
+        Log.i("refreshChallengers", "refreshChallengers: beginning ");
+       challengerRepository.deleteAll()
                 .subscribe(new SingleObserver<Integer>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
+                        Log.i("refreshChallengers", "refreshChallengers: beginning ");
                     }
 
                     @Override
@@ -62,14 +65,13 @@ public class BuildGameViewModel extends AndroidViewModel {
                                 .subscribe(new SingleObserver<Long[]>() {
                                     @Override
                                     public void onSubscribe(@NonNull Disposable d) {
-
                                     }
 
                                     @Override
                                     public void onSuccess(@NonNull Long[] inserted) {
                                         Log.i("bottles", "onSuccess: " + inserted);
                                         List<Long> in = Arrays.asList(inserted);
-                                        if (in.contains(-1)) {
+                                        if (in.contains(-1L)) {
                                             onError(new Throwable());
                                         } else {
                                             challengersRefresh.postValue(true);
@@ -171,10 +173,6 @@ public class BuildGameViewModel extends AndroidViewModel {
 
         if (this.challengers.getValue().size() == selectedValue)
             this.deleteChoice.setValue(false);
-
-
-
-
     }
 
 
@@ -203,6 +201,7 @@ public class BuildGameViewModel extends AndroidViewModel {
                     baseInfo.postValue(new BaseInfo(ToastType.INFO, ToastDuration.LONG, "نام همه بازیکنان را وارد کنید"));
                     break;
                 }
+                Log.i("refreshChallenger", "startGame: ");
                 challengers.get(i).setColor(CustomViewUtils.generateRandomColor());
                 if (i == challengers.size() - 1)
                     refreshChallengers( challengers);
@@ -237,4 +236,6 @@ public class BuildGameViewModel extends AndroidViewModel {
         Objects.requireNonNull(challengers.getValue()).get(position).setImage(uri);
         challengerRepository.updateImage(uri.toString(),challengers.getValue().get(position).getId());
     }
+
+
 }

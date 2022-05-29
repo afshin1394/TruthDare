@@ -49,10 +49,9 @@ public class BottleRepository {
 
 
     @Inject
-    public  BottleRepository(BottleDao bottleDao,ApiService apiService) {
+    public BottleRepository(BottleDao bottleDao,ApiService apiService) {
         this.bottleDao = bottleDao;
         this.apiService = apiService;
-
     }
 
     public Single<List<BottleModel>> getLocalBottles(){

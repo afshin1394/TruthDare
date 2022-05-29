@@ -6,4 +6,5 @@ public  final  class Constants {
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_PICTURE = 1;
     public static final int ALL_PERMISSION = 2;
+    public static final String EDIT_PLAYERS = "EditPlayers";
 }

@@ -37,6 +37,7 @@ import com.afshin.truthordare.MVVM.ViewModel.GameChoiceViewModel;
 import com.afshin.truthordare.MVVM.ViewModel.GameMainViewModel;
 import com.afshin.truthordare.MVVM.ViewModel.IntroductionViewModel;
 import com.afshin.truthordare.Models.BottleModel;
+import com.afshin.truthordare.Utils.Constants;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.CustomViews.Toast;
 import com.afshin.truthordare.Utils.Enums.ToastType;
@@ -210,6 +211,7 @@ public class GameMainFragment extends Fragment implements UIEvents {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
+                bundle.putBoolean(Constants.EDIT_PLAYERS,true);
                 NavigateUtil.Navigate(getActivity(), R.id.action_gameMainFragment_to_bulidGameFragment, bundle, R.id.nav_host_fragment);
             }
         });

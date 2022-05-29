@@ -18,6 +18,9 @@
         android:name="com.afshin.truthordare.MVVM.UI.Fragments.BuildGameFragment"
         android:label="fragment_bulid_game"
         tools:layout="@layout/fragment_bulid_game" >
+        <argument
+            android:name="EditPlayers"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_bulidGameFragment_to_gameMainFragment"
             app:destination="@id/gameMainFragment" />
@@ -45,6 +48,7 @@
         <action
             android:id="@+id/action_gameChoiceFragment_to_actionsFragment"
             app:destination="@id/actionsFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/actionsFragment"
