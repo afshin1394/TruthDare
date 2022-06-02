@@ -116,13 +116,6 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
         Log.i(TAG, "onCreateView: editPlayer "+editPlayer);
         Log.i(TAG, "onCreateView: onCreateView");
         fragmentBulidGameBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bulid_game, container, false);
-        return fragmentBulidGameBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         initializeSpinner();
         fragmentBulidGameBinding.BTNStartGame.setOnClickListener(view1 -> {
             int viewItemCount = challengerNameAdapter.getItemCount();
@@ -131,19 +124,20 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             buildGameViewModel.startGame(context,challengers,viewItemCount);
         });
 
-        buildGameViewModel.getAllChallengers(context);
+        buildGameViewModel.getAllChallengers();
 
         buildGameViewModel.getBaseInfo().observe(getViewLifecycleOwner(), new Observer<BaseInfo>() {
             @Override
             public void onChanged(BaseInfo baseInfo) {
+                Log.i(TAG, " baseInfo");
+
                 Toast.showToast(context,baseInfo.getToastType(),baseInfo.getDuration(),baseInfo.getMessage());
             }
         });
-
         buildGameViewModel.getDeleteChoiceLiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean delete) {
-                Log.i(TAG, "onChanged: "+delete);
+                Log.i(TAG, " delete");
                 hasDeleteChoice = delete;
                 initializeRecyclerView(challengers,delete);
             }
@@ -154,31 +148,36 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
             public void onChanged(List<Challenger> challengers) {
                 BuildGameFragment.this.challengers = challengers;
 
-                Log.i(TAG, "getAllChallengersLiveData: "+challengers.toString());
-                Log.i(TAG, "selectedValue: "+selectedValue);
+                Log.i(TAG, " getAll");
+
                 initializeRecyclerView(challengers,hasDeleteChoice);
-                Log.i("getAllChallengersLiveData", "init spinner:"+initSpinner );
 
                 if (initSpinner)
                 {
-                    Log.i(TAG, "initializeSpinner: "+selectedValue);
                     fragmentBulidGameBinding.SPNumberOfChallengers.setSelection(challengers.size() - 3);
                 }
 
             }
         });
-
         buildGameViewModel.refreshChallengersLiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean refreshed) {
 
-                Log.i(TAG,"refreshed:" + refreshed);
-                Log.i(TAG,"editPlayer:" + editPlayer);
-                if (refreshed &&  !editPlayer) {
+                Log.i(TAG,"refreshed:");
+
+                if (refreshed) {
                     navigateToGameMain();
                 }
             }
         });
+        return fragmentBulidGameBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
 
     }
 
@@ -333,4 +332,6 @@ public class BuildGameFragment extends Fragment implements AdapterView.OnItemSel
 
 
     }
+
+
 }

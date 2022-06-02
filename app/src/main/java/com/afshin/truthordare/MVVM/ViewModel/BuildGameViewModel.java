@@ -21,6 +21,7 @@ import com.afshin.truthordare.Utils.BaseInfo;
 import com.afshin.truthordare.Utils.CustomViewUtils;
 import com.afshin.truthordare.Utils.Enums.ToastDuration;
 import com.afshin.truthordare.Utils.Enums.ToastType;
+import com.afshin.truthordare.Utils.SingleLiveData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,12 +35,15 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import kotlin.jvm.JvmMultifileClass;
+import kotlin.jvm.JvmName;
+
 @HiltViewModel
 public class BuildGameViewModel extends AndroidViewModel {
-    MutableLiveData<Boolean> challengersRefresh = new MutableLiveData<>();
+    SingleLiveData<Boolean> challengersRefresh = new SingleLiveData<>();
     MutableLiveData<List<Challenger>> challengers = new MutableLiveData<>();
-    MutableLiveData<Boolean> deleteChoice = new MutableLiveData<>();
-    MutableLiveData<BaseInfo> baseInfo = new MutableLiveData<>();
+    SingleLiveData<Boolean> deleteChoice = new SingleLiveData<>();
+    SingleLiveData<BaseInfo> baseInfo = new SingleLiveData<>();
     ChallengerRepository challengerRepository;
 
 
@@ -50,7 +54,7 @@ public class BuildGameViewModel extends AndroidViewModel {
     }
 
     public void refreshChallengers(List<Challenger> challengerModels) {
-        Log.i("refreshChallengers", "refreshChallengers: beginning ");
+       Log.i("refreshChallengers", "refreshChallengers: beginning ");
        challengerRepository.deleteAll()
                 .subscribe(new SingleObserver<Integer>() {
                     @Override
@@ -100,7 +104,7 @@ public class BuildGameViewModel extends AndroidViewModel {
 
     }
 
-    public void getAllChallengers(Context context) {
+    public void getAllChallengers() {
 
         challengerRepository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,7 +122,8 @@ public class BuildGameViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        baseInfo.postValue(new BaseInfo(ToastType.ERROR, ToastDuration.SHORT, "مشکلی پیش اومده!"));
+                        Log.d("onError", "onError: ");
+                        baseInfo.setValue(new BaseInfo(ToastType.ERROR, ToastDuration.SHORT, "مشکلی پیش اومده!"));
 
                     }
                 });
@@ -204,7 +209,7 @@ public class BuildGameViewModel extends AndroidViewModel {
                 Log.i("refreshChallenger", "startGame: ");
                 challengers.get(i).setColor(CustomViewUtils.generateRandomColor());
                 if (i == challengers.size() - 1)
-                    refreshChallengers( challengers);
+                    refreshChallengers(challengers);
             }
         }
     }
@@ -236,6 +241,7 @@ public class BuildGameViewModel extends AndroidViewModel {
         Objects.requireNonNull(challengers.getValue()).get(position).setImage(uri);
         challengerRepository.updateImage(uri.toString(),challengers.getValue().get(position).getId());
     }
+
 
 
 }

@@ -20,7 +20,6 @@ public class NavigateUtil
         NavHostFragment navHostFragment =
                 (NavHostFragment) supportFragmentManager.findFragmentById(hostId);
         NavController navController = navHostFragment.getNavController();
-
         navController.navigate(actionId, bundle, NavigationOption.getNavOptions());
     }
 
